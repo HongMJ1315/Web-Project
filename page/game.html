@@ -68,6 +68,16 @@
             left: 0%;
             box-sizing: border-box;
         }
+
+        .mycard {
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+
+        }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script>
@@ -76,6 +86,13 @@
         $(function () {
             var _x, _y;
             $(".card").mousedown(function (e) {
+                var desk_x = $(".card-on-desk").offset().left;
+                var desk_y = $(".card-on-desk").offset().top;
+                var desk_w = $(".card-on-desk").width();
+                var desk_h = $(".card-on-desk").height();
+                if (e.pageX > desk_x && e.pageX < desk_x + desk_w && e.pageY > desk_y && e.pageY < desk_y + desk_h) {
+                    return;
+                }
                 move = true;
                 element = $(this);
                 _x = e.pageX - parseInt($(this).css("left"));
@@ -96,10 +113,16 @@
                 var desk_w = $(".card-on-desk").width();
                 var desk_h = $(".card-on-desk").height();
                 console.log(desk_x, desk_y, desk_w, desk_h);
-                if (element.offset().left > desk_x && element.offset().left < desk_x + desk_w && element.offset().top > desk_y && element.offset().top < desk_y + desk_h) {
+                if (element.offset().left > desk_x && element.offset().left < desk_x + desk_w && element.offset().top > desk_y && element.offset().top < desk_y + desk_h && move) {
                     console.log("在桌子上");
+                    //把卡片放到桌子上 並疊在最上面
+                    element.remove();
+                    $(".mycard").append(element);
+                    var card_x = ((Math.random() * 1000) % (10) + desk_w / 2 - element.width() / 2);
+                    var card_y = ((Math.random() * 1000) % (10) + desk_h - element.height() / 2);
+                    element.css({ "top": card_y, "left": card_x, "z-index": 1 });
                 }
-                else {
+                else if (move) {
                     console.log("不在桌子上");
                     element.css({ "top": 0, "left": 0 });
                 }
@@ -122,9 +145,8 @@
     </div>
     <div class="card-on-desk" id="card-on-desk" name="card-on-desk">
         <div class="rival-card" id="rival-card" name="rival-card"></div>
-        <div class="mycard" id="mycard" name="mycard">
-            <div class="moving">移動到此處按下左鍵</div>
-        </div>
+        <div class="mycard" id="mycard" name="mycard"></div>
+        <div class="moving">移動到此處按下左鍵</div>
     </div>
     <div class="hands" id="hands" name="hands">
         <div class="card" id="card0">
