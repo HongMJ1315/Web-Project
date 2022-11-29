@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>移动div</title>
+    <style type="text/css">
+        body {
+            margin: 0px;
+            padding: 0px;
+            border: none;
+            position: relative;
+        }
+
+        .div1 {
+            width: 100px;
+            height: 100px;
+            background: #ff0000;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+        }
+
+        .div2 {
+            width: 100px;
+            height: 100px;
+            background: #00ff00;
+            position: absolute;
+            top: 0px;
+            left: 110px;
+        }
+
+        .div3 {
+            width: 100px;
+            height: 100px;
+            background: #0000ff;
+            position: absolute;
+            top: 0px;
+            left: 220px;
+        }
+    </style>
+    <script src="http://code.jquery.com/jquery-1.9.0rc1.js"></script>
+    <script type="text/javascript">
+		var move=false;
+		var element;
+		$(function(){
+			var _x,_y;
+			$(".card").mousedown(function(e){
+				move = true;
+				element = $(this);
+				_x=e.pageX-parseInt($(this).css("left"));
+				_y=e.pageY-parseInt($(this).css("top"));
+			})
+			$(document).mousemove(function(e){
+				if(move){
+					var x = e.pageX-_x;
+					var y = e.pageY-_y;
+					$(element).css({"top":y,"left":x});
+				}
+			}).mouseup(function(){
+				move = false;
+			})
+		})
+    </script>
+</head>
+
+<body>
+    <div class="card div1">1</div>
+    <div class="card div2">2</div>
+    <div class="card div3">3</div>
+</body>
+
+</html>
