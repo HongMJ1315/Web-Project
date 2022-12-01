@@ -3,6 +3,12 @@
 
 <head>
     <style>
+        body {
+            margin: 0px;
+            padding: 0px;
+            border: none;
+            position: relative;
+        }
         .rival {
             width: 10%;
             position: absolute;
@@ -52,7 +58,7 @@
         }
 
         .card {
-            position: relative;
+            position: absolute;
             display: inline-block;
             width: 20%;
         }
@@ -88,8 +94,9 @@
 
         }
     </style>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script>
+    <script src="http://code.jquery.com/jquery-1.9.0rc1.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script> -->
+    <script type="text/javascript">
         var move = false;
         var element;
         $(function () {
@@ -114,9 +121,10 @@
                     var x = e.pageX - _x;
                     var y = e.pageY - _y;
                     $(element).css({ "top": y, "left": x });
-                    $(".moving").css({ display: "block" });
+                    // $(".moving").css({ display: "block" });
                 }
             }).mouseup(function () {
+                /*
                 console.log("click up");
                 $(".moving").css({ display: "none" });
                 //如果再桌子上
@@ -140,10 +148,10 @@
                 else if (move) {
                     console.log("不在桌子上");
                     element.css({ "top": 0, "left": 0 });
-                }
+                }//*/
                 move = false;
-            });
-        });
+            })
+        })
     </script>
 </head>
 
