@@ -95,19 +95,21 @@
         $(function () {
             var _x, _y;
             $(".card").mousedown(function (e) {
+                console.log("click");
                 var desk_x = $(".card-on-desk").offset().left;
                 var desk_y = $(".card-on-desk").offset().top;
                 var desk_w = $(".card-on-desk").width();
                 var desk_h = $(".card-on-desk").height();
-                if (e.pageX > desk_x && e.pageX < desk_x + desk_w && e.pageY > desk_y && e.pageY < desk_y + desk_h) {
-                    return;
-                }
+                //if (e.pageX > desk_x && e.pageX < desk_x + desk_w && e.pageY > desk_y && e.pageY < desk_y + desk_h) {
+                //    return;
+                //}
                 move = true;
                 element = $(this);
                 _x = e.pageX - parseInt($(this).css("left"));
                 _y = e.pageY - parseInt($(this).css("top"));
             })
             $(document).mousemove(function (e) {
+                console.log("moving");
                 if (move) {
                     var x = e.pageX - _x;
                     var y = e.pageY - _y;
@@ -115,6 +117,7 @@
                     $(".moving").css({ display: "block" });
                 }
             }).mouseup(function () {
+                console.log("click up");
                 $(".moving").css({ display: "none" });
                 //如果再桌子上
                 var desk_x = $(".card-on-desk").offset().left;
@@ -132,7 +135,7 @@
                     var rotate = ((Math.random() * 1000) % (30) - 15);
                     //更改卡片類別
                     element.attr("class", "on-desk");
-                    element.css({ "top": card_y, "left": card_x, "z-index": 1, "transform": "rotate("+rotate+"deg)" });
+                    element.css({ "top": card_y, "left": card_x, "z-index": 1, "transform": "rotate(" + rotate + "deg)" });
                 }
                 else if (move) {
                     console.log("不在桌子上");
