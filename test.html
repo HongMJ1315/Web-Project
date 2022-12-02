@@ -9,14 +9,14 @@
             margin: 0px;
             padding: 0px;
             border: none;
-            position: relative;
+            /*position: relative;*/
         }
 
         .div1 {
             width: 100px;
             height: 100px;
             background: #ff0000;
-            position: absolute;
+            position: relative;
             top: 0px;
             left: 0px;
         }
@@ -25,7 +25,7 @@
             width: 100px;
             height: 100px;
             background: #00ff00;
-            position: absolute;
+            position: relative;
             top: 0px;
             left: 110px;
         }
@@ -34,7 +34,7 @@
             width: 100px;
             height: 100px;
             background: #0000ff;
-            position: absolute;
+            position: relative;
             top: 0px;
             left: 220px;
         }
@@ -47,18 +47,21 @@
 			var _x,_y;
 			$(".card").mousedown(function(e){
 				move = true;
-				element = $(this);
+                console.log("click", move);
+                element = $(this);
 				_x=e.pageX-parseInt($(this).css("left"));
 				_y=e.pageY-parseInt($(this).css("top"));
 			})
 			$(document).mousemove(function(e){
-				if(move){
+                console.log("moving", move);
+                if (move){
 					var x = e.pageX-_x;
 					var y = e.pageY-_y;
 					$(element).css({"top":y,"left":x});
 				}
 			}).mouseup(function(){
-				move = false;
+                console.log("click up", move);
+                move = false;
 			})
 		})
     </script>
