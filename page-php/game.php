@@ -3,6 +3,13 @@
 
 <head>
     <style>
+        body {
+            margin: 0px;
+            padding: 0px;
+            border: none;
+            /*position: relative;*/
+        }
+
         .rival {
             width: 10%;
             position: absolute;
@@ -24,6 +31,7 @@
             height: 50%;
             position: absolute;
             bottom: 25%;
+            pointer-events: none;
             left: 25%;
             background-color: aqua;
         }
@@ -49,12 +57,15 @@
             width: 100%;
             height: auto;
             background-color: blue;
+            pointer-events: none;
         }
 
         .card {
             position: relative;
             display: inline-block;
-            width: 20%;
+            width: 100px;
+            height: 100px;
+            background-image: url(../atk/2022_11_17_22_25_IMG_7586.PNG);
         }
 
         .on-desk {
@@ -75,6 +86,7 @@
             position: absolute;
             top: 0%;
             left: 0%;
+            pointer-events: none;
             box-sizing: border-box;
         }
 
@@ -88,26 +100,21 @@
 
         }
     </style>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script>
+    <script src="http://code.jquery.com/jquery-1.9.0rc1.js"></script>
+    <script type="text/javascript">
         var move = false;
         var element;
         $(function () {
             var _x, _y;
             $(".card").mousedown(function (e) {
-                var desk_x = $(".card-on-desk").offset().left;
-                var desk_y = $(".card-on-desk").offset().top;
-                var desk_w = $(".card-on-desk").width();
-                var desk_h = $(".card-on-desk").height();
-                if (e.pageX > desk_x && e.pageX < desk_x + desk_w && e.pageY > desk_y && e.pageY < desk_y + desk_h) {
-                    return;
-                }
-                move = true;
                 element = $(this);
                 _x = e.pageX - parseInt($(this).css("left"));
                 _y = e.pageY - parseInt($(this).css("top"));
+                move = true;
+                console.log("click", move);
             })
             $(document).mousemove(function (e) {
+                console.log("moving", move);
                 if (move) {
                     var x = e.pageX - _x;
                     var y = e.pageY - _y;
@@ -115,6 +122,7 @@
                     $(".moving").css({ display: "block" });
                 }
             }).mouseup(function () {
+                console.log("click up", move);
                 $(".moving").css({ display: "none" });
                 //如果再桌子上
                 var desk_x = $(".card-on-desk").offset().left;
@@ -132,7 +140,7 @@
                     var rotate = ((Math.random() * 1000) % (30) - 15);
                     //更改卡片類別
                     element.attr("class", "on-desk");
-                    element.css({ "top": card_y, "left": card_x, "z-index": 1, "transform": "rotate("+rotate+"deg)" });
+                    element.css({ "top": card_y, "left": card_x, "z-index": 1, "transform": "rotate(" + rotate + "deg)" });
                 }
                 else if (move) {
                     console.log("不在桌子上");
