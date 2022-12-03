@@ -4,6 +4,8 @@
 <head>
     <style>
         body {
+            background-image: url(../background/war-6111531_960_7201.jpg);
+            background-repeat: no-repeat;
             margin: 0px;
             padding: 0px;
             border: none;
