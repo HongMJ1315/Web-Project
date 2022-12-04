@@ -5,34 +5,43 @@
     <meta charset="utf-8">
     <title>Game</title>
     <style>
-        .setpassword {
-            display: none;
+        .error{
+            color: red;
         }
     </style>
     <script>
-        function submit() {
-            var box = document.querySelector(".setpassword");
-            // 資料褲檢查帳號 帳號不存在 box.style.backgroundColor = "block";
-            if (box.style.display == "block") {
-                var form = document.getElementById("form");
-                form.submit();
-            }
-        }
-        function init() {
-            document.getElementById("start").addEventListener("click", submit, false);
-        }
-        window.addEventListener("load", init, false);
     </script>
 </head>
 
 <body>
     <div>
-        <form action="lobby.php" name="login" id="form">
-            <div class="user">user name：<input type="text"></div>
-            <div class="setpassword" name="setingpassword">password：<input type="password"></div>
-            <div class="password" name="password">password：<input type="password"></div>
+        <form method="post" action="login.php" name="login" id="form">
+            user name：<input type="text" name="username" id="id"></br>
+            password：<input type="password" name="password"></br>
             <button id="start">Join</button>
         </form>
+        <form action="sign_up.php" name=sign_up>
+            <button id="sign">sign up</button>
+        </form>
+        <?php
+        session_start();
+        if (isset($_POST['username'], $_POST['password'])) {
+            try {
+                $db = new PDO('mysql: host=localhost; dbname=account', 'root', '801559');
+                $stmt = $db->prepare('SELECT username FROM login WHERE username = ? and password = ?');
+                $stmt->execute(array($_POST['username'], $_POST['password']));
+                $row = $stmt->fetchAll();
+                if (count($row) == 0) {
+                    print "<span class='error'>wrong password or username</span>";
+                } else {
+                    $_SESSION['username'] = $_POST['username'];
+                    header("location: lobby.php");
+                }
+            } catch (PDOException $e) {
+                print "error " . $e->getMessage();
+            }
+        }
+        ?>
     </div>
 </body>
 

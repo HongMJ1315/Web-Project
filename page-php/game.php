@@ -2,8 +2,35 @@
 <html>
 
 <head>
+    <?php
+    session_start();
+    if (isset($_SESSION['username'])) {
+        $player = $_SESSION['username'];
+    } 
+    else {
+        header("location: login.php");
+    }
+
+    if (isset($_GET['roomid'])) {
+        $roomid = $_GET['roomid'];
+        $db = new PDO('mysql: host=localhost; dbname=account', 'root', '801559');
+        $sql = $db->prepare("SELECT player1, player2 FROM play WHERE roomid=?");
+        $sql->execute(array($roomid));
+        while($row = $sql->fetch(PDO::FETCH_OBJ) ){
+            if ($row->player1 == "") {
+                $UP = $db->exec("UPDATE play SET player1='$player' WHERE roomid=$roomid");
+            } else {
+                $UP = $db->exec("UPDATE play SET player2='$player' WHERE roomid=$roomid");
+            }        
+        }
+    }
+    ?>    
     <style>
         body {
+            background-image: url("../background/war-6111531_960_7201.jpg");
+            background-repeat: no-repeat;
+            background-position: 50% 0%;
+            background-size: 80%;
             margin: 0px;
             padding: 0px;
             border: none;
@@ -169,6 +196,7 @@
 </head>
 
 <body>
+
     <div class="rival" id="rival">
         <img src="">
         <div class="hp" id="rival-hp" name="rival-hp">50</div>

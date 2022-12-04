@@ -7,17 +7,17 @@
     <style>
         /*背景圖案 背景淡化0.5*/
         body {
-            background-image: url("../background/bombed-932108_960_720.jpg");
+            /* background-image: url("../background/bombed-932108_960_720.jpg"); */
             background-repeat: no-repeat;
-            background-size: cover;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-position: 50% 0%;
+            background-size: 80%;
+            /* background-size: cover; */
+            /* background-color: rgba(0, 0, 0, 0.5); */
             background-blend-mode: multiply;
         }
 
 
         .room {
-            background-image: url("../background/war-6111531_960_720.jpg");
-            background-size: 100% 100%;
 
             width: auto;
             height: auto;
@@ -41,22 +41,22 @@
     <script>
         function init() {
             document.getElementById("room0").addEventListener("click", function () {
-                window.location.href = "room0.html";
+                window.location.href = "game.php?roomid=0";
             });
             document.getElementById("room1").addEventListener("click", function () {
-                window.location.href = "room1.html";
+                window.location.href = "game.php?roomid=1";
             });
             document.getElementById("room2").addEventListener("click", function () {
-                window.location.href = "room2.html";
+                window.location.href = "game.php?roomid=2";
             });
             document.getElementById("room3").addEventListener("click", function () {
-                window.location.href = "room3.html";
+                window.location.href = "game.php?roomid=3";
             });
             document.getElementById("room4").addEventListener("click", function () {
-                window.location.href = "room4.html";
+                window.location.href = "game.php?roomid=4";
             });
             document.getElementById("room5").addEventListener("click", function () {
-                window.location.href = "room5.html";
+                window.location.href = "game.php?roomid=5";
             });
         }
         window.addEventListener("load", init, false);
@@ -66,68 +66,31 @@
 <body>
     <div class="wrap">
         <div class="row">
-            <div id="room0" class="room">
-                <div class="game_room">
-                    <div class="room_name">
-                        <h1>Room 0</h1>
-                    </div>
-                    <div class="room_info">
-                        <p>Players: 0/2</p>
-                    </div>
-                </div>
-            </div>
-            <div id="room1" class="room">
-                <div class="game_room">
-                    <div class="room_name">
-                        <h1>Room 1</h1>
-                    </div>
-                    <div class="room_info">
-                        <p>Players: 0/2</p>
-                    </div>
-                </div>
-            </div>
-            <div id="room2" class="room">
-                <div class="game_room">
-                    <div class="room_name">
-                        <h1>Room 2</h1>
-                    </div>
-                    <div class="room_info">
-                        <p>Players: 0/2</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div id="room3" class="room">
-                <div class="game_room">
-                    <div class="room_name">
-                        <h1>Room 3</h1>
-                    </div>
-                    <div class="room_info">
-                        <p>Players: 0/2</p>
-                    </div>
-                </div>
-            </div>
-            <div id="room4" class="room">
-                <div class="game_room">
-                    <div class="room_name">
-                        <h1>Room 4</h1>
-                    </div>
-                    <div class="room_info">
-                        <p>Players: 0/2</p>
-                    </div>
-                </div>
-            </div>
-            <div id="room5" class="room">
-                <div class="game_room">
-                    <div class="room_name">
-                        <h1>Room 5</h1>
-                    </div>
-                    <div class="room_info">
-                        <p>Players: 0/2</p>
-                    </div>
-                </div>
-            </div>
+            <?php
+            session_start();
+            if (isset($_SESSION['username'])) {
+                $db = new PDO('mysql: host=localhost; dbname=account', 'root', '801559');
+                $q = $db->query("SELECT roomid, player1, player2 FROM play order by roomid");
+                while ($row = $q->fetch(PDO::FETCH_OBJ)) {
+                    echo "<div id='room" . $row->roomid . "' class='room'>";
+                    echo "<div class='game_room'>";
+                    echo "<div class='room_name'>";
+                    echo "<h1>Room " . $row->roomid . "</h1></div>";
+                    echo "<div class='room_info'>";
+                    if ($row->player1 == "") {
+                        echo "<p>Players: 0/2</p>";
+                    } elseif ($row->player2 == "") {
+                        echo "<p>Players: 1/2</p>";
+                    } else {
+                        echo "<p>Players: 2/2</p>";
+                    }
+                    echo "</div></div></div>";
+                }
+            }//*
+            else{
+                header("location: login.php");
+            }//*/
+            ?>
         </div>
     </div>
 </body>
