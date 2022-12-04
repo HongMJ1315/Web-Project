@@ -4,11 +4,10 @@
 <head>
     <style>
         body {
-            background-image: url(../background/war-6111531_960_7201.jpg);
-            background-repeat: no-repeat;
             margin: 0px;
             padding: 0px;
             border: none;
+            user-select: none;
             /*position: relative;*/
         }
 
@@ -104,6 +103,7 @@
     </style>
     <script src="http://code.jquery.com/jquery-1.9.0rc1.js"></script>
     <script type="text/javascript">
+        ///*
         var move = false;
         var element;
         $(function () {
@@ -150,7 +150,21 @@
                 }
                 move = false;
             })
+            $(".card").dblclick(function () {
+                var element = $(this);
+                console.log("double click");
+                element.remove();
+                $(".mycard").append(element);
+                var card_x = ((Math.random() * 1000) % (50));
+                var card_y = ((Math.random() * 1000) % (10) + element.height() / 4);
+                var rotate = ((Math.random() * 1000) % (30) - 15);
+                //更改卡片類別
+                element.attr("class", "on-desk");
+                element.css({ "top": card_y, "left": card_x, "z-index": 1, "transform": "rotate(" + rotate + "deg)" });
+            });
         })
+
+        //*/
     </script>
 </head>
 
