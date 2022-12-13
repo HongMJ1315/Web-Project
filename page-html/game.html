@@ -161,6 +161,15 @@
                     var img = element.children("img");
                     //取得img的src
                     var src = img.attr("src");
+                    //用ajax 傳送src
+                    $.ajax({
+                        url: "想一下",
+                        type: "POST",
+                        data: { "src": src },
+                        success: function (data) {
+                            console.log(data);
+                        }
+                    })
                     console.log(src);
                     element.remove();
                     $(".mycard").append(element);
