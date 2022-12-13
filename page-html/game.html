@@ -24,7 +24,7 @@
             }        
         }
     }
-    ?>    
+    ?>
     <style>
         body {
             background-image: url("../background/war-6111531_960_7201.jpg");
@@ -133,7 +133,7 @@
         ///*
         var move = false;
         var element;
-        const now = [];
+        var now = new Array();
         $(function () {
             var _x, _y;
             $(".card").mousedown(function (e) {
@@ -152,20 +152,21 @@
             }).mouseup(function () {
                 console.log("click up", move);
                 $(".moving").css({ display: "none" });
-                //如果再桌子上
                 var desk_x = $(".card-on-desk").offset().left;
                 var desk_y = $(".card-on-desk").offset().top;
                 var desk_w = $(".card-on-desk").width();
                 var desk_h = $(".card-on-desk").height();
                 if (element.offset().left > desk_x && element.offset().left < desk_x + desk_w && element.offset().top > desk_y && element.offset().top < desk_y + desk_h && move) {
-                    now.push(this.innerHTML.split('"')[1]);
-                    //把卡片放到桌子上 並疊在最上面
+                    //取得element 底下的img
+                    var img = element.children("img");
+                    //取得img的src
+                    var src = img.attr("src");
+                    console.log(src);
                     element.remove();
                     $(".mycard").append(element);
                     var card_x = ((Math.random() * 1000) % (50));
                     var card_y = ((Math.random() * 1000) % (10) + element.height() / 4);
                     var rotate = ((Math.random() * 1000) % (30) - 15);
-                    //更改卡片類別
                     element.attr("class", "on-desk");
                     element.css({ "top": card_y, "left": card_x, "z-index": 1, "transform": "rotate(" + rotate + "deg)" });
                 }
