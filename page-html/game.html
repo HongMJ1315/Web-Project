@@ -157,11 +157,8 @@
                 var desk_w = $(".card-on-desk").width();
                 var desk_h = $(".card-on-desk").height();
                 if (element.offset().left > desk_x && element.offset().left < desk_x + desk_w && element.offset().top > desk_y && element.offset().top < desk_y + desk_h && move) {
-                    //取得element 底下的img
                     var img = element.children("img");
-                    //取得img的src
                     var src = img.attr("src");
-                    //用ajax 傳送src
                     $.ajax({
                         url: "想一下",
                         type: "POST",
