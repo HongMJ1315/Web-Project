@@ -159,6 +159,7 @@
                 if (element.offset().left > desk_x && element.offset().left < desk_x + desk_w && element.offset().top > desk_y && element.offset().top < desk_y + desk_h && move) {
                     var img = element.children("img");
                     var src = img.attr("src");
+                    //這邊也讓我知道出牌時你那邊要幹嘛
                     $.ajax({
                         url: "想一下",
                         type: "POST",
@@ -189,12 +190,22 @@
                 var card_x = ((Math.random() * 1000) % (50));
                 var card_y = ((Math.random() * 1000) % (10) + element.height() / 4);
                 var rotate = ((Math.random() * 1000) % (30) - 15);
-                //更改卡片類別
                 element.attr("class", "on-desk");
                 element.css({ "top": card_y, "left": card_x, "z-index": 1, "transform": "rotate(" + rotate + "deg)" });
             });
         })
-
+        function ingame(){
+            //這邊讓我知道你會回傳的東西
+            $.ajax({
+                url: "想一下",
+                type: "GET",
+                data: { "now": now },
+                success: function (data) {
+                    console.log(data);
+                }
+            })
+        }
+        setInterval(ingame, 1000);
         //*/
     </script>
 </head>
