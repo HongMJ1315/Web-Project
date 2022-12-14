@@ -159,15 +159,8 @@
                 if (element.offset().left > desk_x && element.offset().left < desk_x + desk_w && element.offset().top > desk_y && element.offset().top < desk_y + desk_h && move) {
                     var img = element.children("img");
                     var src = img.attr("src");
-                    $.ajax({
-                        url: "想一下",
-                        type: "POST",
-                        data: { "src": src },
-                        success: function (data) {
-                            console.log(data);
-                        }
-                    })
-                    console.log(src);
+                    now.push(src);
+                    console.log(now);
                     element.remove();
                     $(".mycard").append(element);
                     var card_x = ((Math.random() * 1000) % (50));
