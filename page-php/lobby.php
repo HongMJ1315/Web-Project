@@ -41,7 +41,7 @@
     <script>
         function init() {
             document.getElementById("room0").addEventListener("click", function () {
-                window.location.href = "game.php?roomid=0";
+                window.location.href = "gameA.php?roomid=0";
             });
             document.getElementById("room1").addEventListener("click", function () {
                 window.location.href = "game.php?roomid=1";
