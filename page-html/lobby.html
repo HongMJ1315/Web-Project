@@ -37,6 +37,27 @@
             display: flex;
             flex-wrap: wrap;
         }
+
+
+        .start {
+            background-color: rgba(0, 0, 0, 0.5);
+            background-blend-mode: multiply;
+            width: 300px;
+            height: 100px;
+            border: 1px solid #000;
+            position: absolute;
+            bottom: 50px;
+            right: 50px;
+            /*文字在正中間*/
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            color: #fff;
+
+            margin: 10px;
+            box-sizing: border-box;
+        }
     </style>
     <script>
         function init() {
@@ -66,7 +87,7 @@
 <body>
     <div class="wrap">
         <div class="row">
-            <div id="room0" class="room">
+            <!-- <div id="room0" class="room">
                 <div class="game_room">
                     <div class="room_name">
                         <h1>Room 0</h1>
@@ -127,6 +148,10 @@
                         <p>Players: 0/2</p>
                     </div>
                 </div>
+            </div> -->
+            <!-- 開始遊戲 -->
+            <div class="start">
+                start
             </div>
         </div>
     </div>
