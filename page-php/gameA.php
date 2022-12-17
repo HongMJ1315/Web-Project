@@ -54,7 +54,7 @@
             bottom: 25%;
             pointer-events: none;
             left: 25%;
-            background-color: aqua;
+            background-color:rgba(0, 0, 0, 0.5);
         }
         .hp {
             top: 0%;
@@ -101,6 +101,8 @@
             left: 0%;
             pointer-events: none;
             box-sizing: border-box;
+            color: #fff;
+
         }
         .mycard {
             position: absolute;

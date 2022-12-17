@@ -61,7 +61,7 @@
             bottom: 25%;
             pointer-events: none;
             left: 25%;
-            background-color: aqua;
+            background-color: rgba(0, 0, 0, 0.5);
         }
 
         .hp {
@@ -116,6 +116,7 @@
             left: 0%;
             pointer-events: none;
             box-sizing: border-box;
+            color: #fff;
         }
 
         .mycard {
@@ -199,7 +200,7 @@
                 element.css({ "top": card_y, "left": card_x, "z-index": 1, "transform": "rotate(" + rotate + "deg)" });
             });
         })
-        function ingame(){
+        function ingame() {
             //這邊讓我知道你會回傳的東西
             $.ajax({
                 url: "想一下",
