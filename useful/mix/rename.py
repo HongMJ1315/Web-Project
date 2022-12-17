@@ -16,5 +16,9 @@ for i in res:
     if(i[-3:]==".py") or (i=="border.png"):
         continue
     #將檔案重新命名
+<<<<<<< HEAD
     os.rename(i.replace(".\\",""),"eff_booldloss_"+str(j)+".png")
+=======
+    os.rename(i.replace(".\\",""),"def_"+str(j)+".png")
+>>>>>>> 7f4b19a182dd3a0fffb8728b6611b5b18869a6d2
     j+=1

@@ -18,7 +18,11 @@ for i in res:
     
 print(all)
 imgSize = (1080, 1920)
+<<<<<<< HEAD
 border=Image.open("..\\border.png").convert("RGBA")
+=======
+border=Image.open("border.png").convert("RGBA")
+>>>>>>> 7f4b19a182dd3a0fffb8728b6611b5b18869a6d2
 border=border.resize(imgSize)
 for i in all:
     if(i=="border.png"):
