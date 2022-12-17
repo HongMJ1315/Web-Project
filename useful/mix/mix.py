@@ -18,13 +18,12 @@ for i in res:
     
 print(all)
 imgSize = (1080, 1920)
-border=Image.open("border.png").convert("RGBA")
+border=Image.open("..\\border.png").convert("RGBA")
 border=border.resize(imgSize)
 for i in all:
     if(i=="border.png"):
         continue
     img= Image.open(i)
     img=img.resize(imgSize).convert("RGBA")
-    #將border.png和i的圖片合併
     img=Image.alpha_composite(img,border)
     img.save("fix\\"+i)
