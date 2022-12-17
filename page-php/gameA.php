@@ -8,16 +8,19 @@
         $player = $_SESSION['username'];
     else 
         header("location: login.php");
-    if (isset($_GET['roomid'])) {
-        $roomid = $_GET['roomid'];
-        $db = new PDO('mysql: host=localhost; dbname=account', 'root', '801559');
-        $sql = $db->prepare("SELECT player1, player2 FROM play WHERE roomid=?");
-        $sql->execute(array($roomid));
-        while($row = $sql->fetch(PDO::FETCH_OBJ) ){
-            if ($row->player1 == "") 
-                $UP = $db->exec("UPDATE play SET player1='$player' WHERE roomid=$roomid");
-            else 
-                $UP = $db->exec("UPDATE play SET player2='$player' WHERE roomid=$roomid");  
+    $db = new PDO('mysql: host=localhost; dbname=account', 'root', '801559');
+    $sql = $db->query("SELECT player1, player2 FROM play");
+    while($row = $sql->fetch(PDO::FETCH_OBJ) ){
+        if ($row->player1 == "") {
+            $UP = $db->exec("UPDATE play SET player1='$player'");
+            $atk = rand(0, 1);
+            $First_Round = "INSERT INTO around (round, HP, atk, card1, card2, card3, card4, card5)
+                            VALUE (1, 50, $atk, 0, 0, 0, 0, 0)";
+            $db->exec($First_Round);
+        }
+        else {
+            $UP = $db->exec("UPDATE play SET player2='$player'");
+            // header("location: gameB.php");
         }
     }
     ?>    
@@ -31,7 +34,6 @@
             padding: 0px;
             border: none;
             user-select: none;
-            /*position: relative;*/
         }
         .rival {
             width: 10%;
@@ -54,7 +56,7 @@
             bottom: 25%;
             pointer-events: none;
             left: 25%;
-            background-color:rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.5);
         }
         .hp {
             top: 0%;
@@ -81,11 +83,10 @@
             display: inline-block;
             width: 100px;
             height: 100px;
-            background-image: url(../atk/2022_11_17_22_25_IMG_7586.PNG);
         }
         .on-desk {
             position: absolute;
-            width: 20%;
+            width: 50%;
         }
         .on-desk>img {
             width: 100%;
@@ -102,16 +103,24 @@
             pointer-events: none;
             box-sizing: border-box;
             color: #fff;
-
         }
+
         .mycard {
             position: absolute;
             top: 0%;
             left: 0%;
-            width: 100%;
+            width: 50%;
             height: 100%;
             z-index: 1;
+        }
 
+        .rival-card {
+            position: absolute;
+            top: 0%;
+            right: 0%;
+            width: 50%;
+            height: 100%;
+            z-index: 1;
         }
     </style>
     <script src="http://code.jquery.com/jquery-1.9.0rc1.js"></script>
@@ -119,7 +128,23 @@
         var move = false;
         var element;
         const now = [];
-        var round, HP;
+        var round, HP, atk;
+        /*
+        var start = setInterval(function(){Start()}, 1000);
+        var run;
+        function Start(){
+            $.ajax({
+                type: "POST",
+                url: "check.php",
+                dataType: "json",
+                success: function(data){
+                    if(data == 1){
+                        clearInterval(start);
+                        run = setInterval(function(){getCard(), 5000});
+                    }
+                }
+            })
+        }//*/
         var run = setInterval(function(){getCard()}, 5000);
 
         function getCard(){
@@ -131,7 +156,10 @@
                     rd: round
                 },
                 success: function(data){
-                    console.log(data);
+                    var rival = document.getElementById("rival-card");
+                    for(var i = 0; i < data.length; i++){
+                        rival.innerHTML += "<img id='"+ data[i][0] + "' src='" + data[i][1] + "'>";
+                    }
                 },
                 error: function(){
                     console.log("failed");
@@ -162,7 +190,7 @@
                 var desk_w = $(".card-on-desk").width();
                 var desk_h = $(".card-on-desk").height();
                 if (element.offset().left > desk_x && element.offset().left < desk_x + desk_w && element.offset().top > desk_y && element.offset().top < desk_y + desk_h && move) {
-                    now.push(element.children("img").attr("src"));
+                    now.push(parseInt(element.children("img").attr("id")));
                     //把卡片放到桌子上 並疊在最上面
                     element.remove();
                     $(".mycard").append(element);
@@ -180,7 +208,7 @@
             })
             $(".card").dblclick(function () {
                 var element = $(this);
-                now.push(this.innerHTML.split('"')[1]);
+                now.push(parseInt(element.children("img").attr("id")));
                 element.remove();
                 $(".mycard").append(element);
                 var card_x = ((Math.random() * 1000) % (50));
@@ -192,18 +220,19 @@
             });
         })
         function post(){
-            console.log(now);
             $.ajax({
                 type: "POST",
                 url: "playA.php",
                 dataType: "json",
                 data: {
-                    src: now,
+                    id: now,
                     rd: round,
-                    HP: HP
-                },
+                    HP: HP, 
+                    atk: atk
+                },  
                 success: function(data){
                     console.log(data);
+                    round += 1;
                 }
             })
         }
@@ -212,12 +241,24 @@
             HP = 50;
             while(now.length > 0)
                 now.pop();
+            $.ajax({
+                type: "POST",
+                url: "start.php",
+                dataType: "json",
+                success: function(data){
+                    console.log(data);
+                    atk = data[0];
+                    for(var i = 0; i < data.length - 1; i++){
+                        var now = document.getElementById("card" + i);
+                        now.innerHTML = "<img id='"+ data[i + 1][0] + "' src='" + data[i + 1][1] + "'>";
+                    }
+                }
+            })
         }
-        window.addEventListener("load", init, "false");
     </script>
 </head>
 
-<body>
+<body onload="init()">
 
     <div class="rival" id="rival">
         <img src="">
@@ -231,16 +272,21 @@
     </div>
     <div class="card-on-desk" id="card-on-desk" name="card-on-desk">
         <div class="rival-card" id="rival-card" name="rival-card"></div>
+        <!-- 牌的顯示太大了 -->
         <div class="mycard" id="mycard" name="mycard"></div>
         <div class="moving">移動到此處按下左鍵</div>
     </div>
     <div class="hands" id="hands" name="hands">
-        <div class="card" id="card0">
-            <img src="../atk/2022_11_17_22_25_IMG_7586.PNG">
-        </div>
-        <div class="card" id="card1">
-            <img src="../atk/2022_11_18_15_18_IMG_7591.JPG">
-        </div>
+        <div class="card" id="card0"></div>
+        <div class="card" id="card1"></div>
+        <div class="card" id="card2"></div>
+        <div class="card" id="card3"></div>
+        <div class="card" id="card4"></div>
+        <div class="card" id="card5"></div>
+        <div class="card" id="card6"></div>
+        <div class="card" id="card7"></div>
+        <div class="card" id="card8"></div>
+        <div class="card" id="card9"></div>
     </div>
     <input type="button" value="出牌" onclick="post()"></button>
 </body>

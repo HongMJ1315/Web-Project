@@ -3,25 +3,26 @@ header('Content-Type: application/json; charset=UTF-8');
 
 if($_SERVER['REQUEST_METHOD'] == "POST"){
     $db = new PDO('mysql: host=localhost; dbname=account', 'root', '801559');
-    $card = $_POST['src'];
+    $card = $_POST['id'];
     $len = count($card);
     $round = $_POST['rd'];
     $HP = $_POST['HP'];
+    $atk = $_POST['atk'];
     if($len == 1)
         $sql = "INSERT INTO bround (round, HP, atk, card1, card2, card3, card4, card5) 
-                VALUES ($round, $HP, 1, '$card[0]', '', '', '', '')";
+                VALUES ($round, $HP, $atk, $card[0], 0, 0, 0, 0)";
     else if($len == 2)
         $sql = "INSERT INTO bround (round, HP, atk, card1, card2, card3, card4, card5) 
-                VALUES ($round, $HP, 1, '$card[0]', '$card[1]', '', '', '')";
+                VALUES ($round, $HP, $atk, $card[0], $card[1], 0, 0, 0)";
     else if($len == 3)
         $sql = "INSERT INTO bround (round, HP, atk, card1, card2, card3, card4, card5) 
-                VALUES ($round, $HP, 1, '$card[0]', '$card[1]', '$card[2]', '', '')";
+                VALUES ($round, $HP, $atk, $card[0], $card[1], $card[2], 0, 0)";
     else if($len == 4)
         $sql = "INSERT INTO bround (round, HP, atk, card1, card2, card3, card4, card5) 
-                VALUES ($round, $HP, 1, '$card[0]', '$card[1]', '$card[2]', '$card[3]', '')";
+                VALUES ($round, $HP, $atk, $card[0], $card[1], $card[2], $card[3], 0)";
     else if($len == 5)
         $sql = "INSERT INTO bround (round, HP, atk, card1, card2, card3, card4, card5) 
-                VALUES ($round, $HP, 1, '$card[0]', '$card[1]', '$card[2]', '$card[3]', 'card[4]')";
+                VALUES ($round, $HP, $atk, $card[0], $card[1], $card[2], $card[3], $card[4])";
     $db->exec($sql);
     echo json_encode($sql);
 }

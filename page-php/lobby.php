@@ -7,17 +7,17 @@
     <style>
         /*背景圖案 背景淡化0.5*/
         body {
-            /* background-image: url("../background/bombed-932108_960_720.jpg"); */
+            background-image: url("../background/bombed-932108_960_720.jpg");
             background-repeat: no-repeat;
-            background-position: 50% 0%;
-            background-size: 80%;
-            /* background-size: cover; */
-            /* background-color: rgba(0, 0, 0, 0.5); */
+            background-size: cover;
+            background-color: rgba(0, 0, 0, 0.5);
             background-blend-mode: multiply;
         }
 
 
         .room {
+            background-image: url("../background/war-6111531_960_720.jpg");
+            background-size: 100% 100%;
 
             width: auto;
             height: auto;
@@ -37,60 +37,58 @@
             display: flex;
             flex-wrap: wrap;
         }
-    </style>
-    <script>
-        function init() {
-            document.getElementById("room0").addEventListener("click", function () {
-                window.location.href = "gameA.php?roomid=0";
-            });
-            document.getElementById("room1").addEventListener("click", function () {
-                window.location.href = "game.php?roomid=1";
-            });
-            document.getElementById("room2").addEventListener("click", function () {
-                window.location.href = "game.php?roomid=2";
-            });
-            document.getElementById("room3").addEventListener("click", function () {
-                window.location.href = "game.php?roomid=3";
-            });
-            document.getElementById("room4").addEventListener("click", function () {
-                window.location.href = "game.php?roomid=4";
-            });
-            document.getElementById("room5").addEventListener("click", function () {
-                window.location.href = "game.php?roomid=5";
-            });
+
+
+        .start {
+            background-color: rgba(0, 0, 0, 0.5);
+            background-blend-mode: multiply;
+            width: 300px;
+            height: 100px;
+            border: 1px solid #000;
+            position: absolute;
+            bottom: 50px;
+            right: 50px;
+            /*文字在正中間*/
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            color: #fff;
+
+            margin: 10px;
+            box-sizing: border-box;
         }
-        window.addEventListener("load", init, false);
+    </style>
+    <script src="http://code.jquery.com/jquery-1.9.0rc1.js"></script>
+    <script>
+        function start(){
+            window.location.href = "gameA.php";
+            /*
+            $.ajax({
+                type: "POST",
+                url: "check.php",
+                dataType: "json",
+                success: function(data){
+                    console.log(data);
+                    if(data == 1){
+                        alert("busy line");
+                    }
+                    else{
+                        window.location.href = "gameA.php";
+                    }
+                }   
+            })//*/
+        }
     </script>
 </head>
 
 <body>
     <div class="wrap">
         <div class="row">
-            <?php
-            session_start();
-            if (isset($_SESSION['username'])) {
-                $db = new PDO('mysql: host=localhost; dbname=account', 'root', '801559');
-                $q = $db->query("SELECT roomid, player1, player2 FROM play order by roomid");
-                while ($row = $q->fetch(PDO::FETCH_OBJ)) {
-                    echo "<div id='room" . $row->roomid . "' class='room'>";
-                    echo "<div class='game_room'>";
-                    echo "<div class='room_name'>";
-                    echo "<h1>Room " . $row->roomid . "</h1></div>";
-                    echo "<div class='room_info'>";
-                    if ($row->player1 == "") {
-                        echo "<p>Players: 0/2</p>";
-                    } elseif ($row->player2 == "") {
-                        echo "<p>Players: 1/2</p>";
-                    } else {
-                        echo "<p>Players: 2/2</p>";
-                    }
-                    echo "</div></div></div>";
-                }
-            }//*
-            else{
-                header("location: login.php");
-            }//*/
-            ?>
+            <!-- 開始遊戲 -->
+            <div class="start" onclick="start()">
+                start
+            </div>
         </div>
     </div>
 </body>
