@@ -13,8 +13,8 @@ all=[]
 j=0
 for i in res:
     
-    if(i[-3:]==".py") or (i=="border.png"):
+    if(i[-3:]==".py"):
         continue
     #將檔案重新命名
-    os.rename(i.replace(".\\",""),"eff_invincible_"+str(j)+".png")
+    os.rename(i.replace(".\\",""),"atk_"+str(j)+".png")
     j+=1

@@ -211,6 +211,13 @@
                     element.css({ "top": 0, "left": 0 });
                 }
                 move = false;
+                // 檢查是否有卡片
+                if ($(".card").length == 0) {
+                    $(".postcard").css({ display: "block" });
+                }
+                else {
+                    $(".postcard").css({ display: "none" });
+                }
             })
             $(".card").dblclick(function () {
                 var element = $(this);
@@ -246,6 +253,7 @@
             HP = 50;
             while (now.length > 0)
                 now.pop();
+            $(".postcard").css({ display: "none" });
         }
         window.addEventListener("load", init, "false");
     </script>
@@ -265,14 +273,10 @@
     </div>
     <div class="card-on-desk" id="card-on-desk" name="card-on-desk">
         <div class="rival-card" id="rival-card" name="rival-card">
-            <div class="card" id="card0">
-                <img src="../card/atk/2022_11_17_22_25_IMG_7586.PNG">
-            </div>
+
         </div>
         <div class="mycard" id="mycard" name="mycard">
-            <div class="card" id="card0">
-                <img src="../card/atk/atk_0.png">
-            </div>
+
         </div>
         <div class="moving">移動到此處按下左鍵</div>
     </div>
@@ -280,9 +284,7 @@
         <div class="card" id="card0">
             <img src="../card/atk/atk_0.png">
         </div>
-        <div class="card" id="card1">
-            <img src="../atk/2022_11_18_15_18_IMG_7591.JPG">
-        </div>
+
     </div>
     <div onclick="post()" class="postcard">
         出牌
