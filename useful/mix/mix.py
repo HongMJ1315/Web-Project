@@ -23,7 +23,9 @@ border=border.resize(imgSize)
 for i in all:
     if(i=="border.png"):
         continue
+    newImg=Image.new("RGBA",imgSize,(255,255,255,0))
     img= Image.open(i)
-    img=img.resize(imgSize).convert("RGBA")
-    img=Image.alpha_composite(img,border)
-    img.save("fix\\"+i)
+    img=img.convert("RGBA")
+    newImg.paste(img,(90,140),img)
+    newImg.paste(border,(0,0),border)
+    newImg.save("fix\\"+i)
