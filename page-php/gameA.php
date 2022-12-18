@@ -14,13 +14,13 @@
         if ($row->player1 == "") {
             $UP = $db->exec("UPDATE play SET player1='$player'");
             $atk = rand(0, 1);
-            $First_Round = "INSERT INTO around (round, HP, atk, card1, card2, card3, card4, card5)
-                            VALUE (1, 50, $atk, 0, 0, 0, 0, 0)";
+            $First_Round = "INSERT INTO around (round, HP, atk, card1, card2, card3, card4, card5, damage, defense, persist, invincible, lifesteal, purify, self_persist)
+                            VALUE (1, 50, $atk, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)";
             $db->exec($First_Round);
         }
         else {
             $UP = $db->exec("UPDATE play SET player2='$player'");
-            // header("location: gameB.php");
+            header("location: gameB.php");
         }
     }
     ?>    
@@ -129,9 +129,67 @@
         var element;
         const now = [];
         var round, HP, atk;
-        /*
-        var start = setInterval(function(){Start()}, 1000);
+        //*
+        var start = setInterval(function(){Start()}, 7000);
         var run;
+        var check_round_end;
+
+        function Check_Round(){
+            console.log("start");
+            $.ajax({
+                type: "POST",
+                url: "solve.php",
+                dataType: "json",
+                data: {
+                    rd: round
+                },
+                success: function(data){
+                    console.log(data);
+                    if(data[0] == 1){
+                        round++;
+                        /*這條
+                        document.getElementById("mycard").innerHTML = "";
+                        //*/
+                        document.getElementById("rival-card").innerHTML = "";
+                        while(now.length > 0)
+                            now.pop();
+                        run = setInterval(function(){getCard()}, 5000);
+
+                        for(var i = 0; i < 10; i++){
+                            var nowC = document.getElementById("card" + i);
+                            if(nowC.innerHTML == ""){
+                                nowC.innerHTML = "<img id='"+ data[1] + "' src='" + data[2] + "'>";
+                                break;
+                            }
+                        }
+                    }
+                },
+                error: function(jqXHR){
+                    console.log("fail");
+                }
+            })
+        }
+
+        function init(){
+            round = 1;
+            HP = 50;
+            while(now.length > 0)
+                now.pop();
+            $.ajax({
+                type: "POST",
+                url: "start.php",
+                dataType: "json",
+                success: function(data){
+                    console.log(data);
+                    atk = data[0];
+                    for(var i = 0; i < data.length - 1; i++){
+                        var now = document.getElementById("card" + i);
+                        now.innerHTML = "<img id='"+ data[i + 1][0] + "' src='" + data[i + 1][1] + "'>";
+                    }
+                }
+            })
+        }
+
         function Start(){
             $.ajax({
                 type: "POST",
@@ -139,13 +197,15 @@
                 dataType: "json",
                 success: function(data){
                     if(data == 1){
+                        // console.log("stop");
                         clearInterval(start);
-                        run = setInterval(function(){getCard(), 5000});
+                        init();
+                        run = setInterval(function(){getCard()}, 5000);
                     }
                 }
             })
         }//*/
-        var run = setInterval(function(){getCard()}, 5000);
+        // var run = setInterval(function(){getCard()}, 5000);
 
         function getCard(){
             $.ajax({
@@ -159,6 +219,10 @@
                     var rival = document.getElementById("rival-card");
                     for(var i = 0; i < data.length; i++){
                         rival.innerHTML += "<img id='"+ data[i][0] + "' src='" + data[i][1] + "'>";
+                    }
+                    if(data.length > 0){
+                        clearInterval(run);    
+                        check_round_end = setInterval(function(){Check_Round()}, 10000);
                     }
                 },
                 error: function(){
@@ -231,34 +295,20 @@
                     atk: atk
                 },  
                 success: function(data){
-                    console.log(data);
-                    round += 1;
+                    // console.log(data);
+                    // console.log("sus");
+                    
+                },
+                error: function(jqXHR){
+                    // console.log("failed");
                 }
             })
         }
-        function init(){
-            round = 1;
-            HP = 50;
-            while(now.length > 0)
-                now.pop();
-            $.ajax({
-                type: "POST",
-                url: "start.php",
-                dataType: "json",
-                success: function(data){
-                    console.log(data);
-                    atk = data[0];
-                    for(var i = 0; i < data.length - 1; i++){
-                        var now = document.getElementById("card" + i);
-                        now.innerHTML = "<img id='"+ data[i + 1][0] + "' src='" + data[i + 1][1] + "'>";
-                    }
-                }
-            })
-        }
+        
     </script>
 </head>
 
-<body onload="init()">
+<body>
 
     <div class="rival" id="rival">
         <img src="">

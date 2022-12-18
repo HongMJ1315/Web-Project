@@ -115,6 +115,42 @@
         const now = [];
         var round, HP, atk;
         var run = setInterval(function(){getCard()}, 5000);
+        var check_round_end;
+        
+        function Check_Round(){
+            $.ajax({
+                type: "POST",
+                url: "solve.php",
+                dataType: "json",
+                data: {
+                    rd: round
+                },
+                success: function(data){
+                    console.log(1);
+                    if(data[0] == 1){
+                        round++;
+                        /*這條
+                        document.getElementById("mycard").innerHTML = "";
+                        //*/
+                        document.getElementById("rival-card").innerHTML = "";
+                        while(now.length > 0)
+                            now.pop();
+                        run = setInterval(function(){getCard()}, 5000);
+
+                        for(var i = 0; i < 10; i++){
+                            var nowC = document.getElementById("card" + i);
+                            if(nowC.innerHTML == ""){
+                                nowC.innerHTML = "<img id='"+ data[1] + "' src='" + data[2] + "'>";
+                                break;
+                            }
+                        }
+                    }
+                },
+                error: function(jqXHR){
+                    console.log(0);
+                }
+            })
+        }
 
         function getCard(){
             $.ajax({
@@ -128,6 +164,11 @@
                     var rival = document.getElementById("rival-card");
                     for(var i = 0; i < data.length; i++){
                         rival.innerHTML += "<img id='"+ data[i][0] + "' src='" + data[i][1] + "'>";
+                    }
+                    if(data.length > 0){
+                        console.log(1);
+                        clearInterval(run);    
+                        check_round_end = setInterval(function(){Check_Round()}, 10000);
                     }
                 },
                 error: function(){
@@ -189,7 +230,6 @@
             });
         })
         function post(){
-            console.log(now);
             $.ajax({
                 type: "POST",
                 url: "playB.php",
@@ -201,8 +241,11 @@
                     atk: atk
                 },
                 success: function(data){
-                    console.log(data);
-                    round += 1;
+                    // console.log(data);
+                    
+                },
+                error: function(jqXHR){
+                    // console.log("fail");
                 }
             })
         }
