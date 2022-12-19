@@ -1,28 +1,18 @@
 <!DOCTYPE html>
-<html style="width: 1000px;">
+<html>
 
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+
     <style>
-
-
-
-        .background {
-            position: absolute;
-            pointer-events: none;
-
-            top: 0%;
-            left: 0%;
-            width: 100%;
-            height: auto;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-
-        @media (max-width: 710px) {
-            .background {
-                width: auto;
-                height: 100%;
-            }
+        body {
+            background-image: url("../background/war-6111531_960_7201.jpg");
+            background-repeat: no-repeat;
+            background-position: 50% 0%;
+            background-size: 80%;
+            margin: 0px;
+            padding: 0px;
+            border: none;
+            user-select: none;
         }
 
         .rival {
@@ -67,14 +57,16 @@
             bottom: 0%;
         }
 
-        .card>img {
+        .card>img,
+        .N>img {
             width: 100%;
             height: auto;
             background-color: blue;
             pointer-events: none;
         }
 
-        .card {
+        .card,
+        .N {
             position: relative;
             display: inline-block;
             width: 100px;
@@ -82,13 +74,13 @@
         }
 
         .on-desk {
-            position: absolute;
+            position: relative;
             display: inline-block;
-            width: 100%;
+            width: 50%;
         }
 
         .on-desk>img {
-            width: 50%;
+            width: 30%;
         }
 
         .moving {
@@ -122,21 +114,6 @@
             height: 100%;
             z-index: 1;
         }
-
-        .post {
-            position: absolute;
-            top: 45%;
-            left: 80%;
-            width: 10%;
-            height: 10%;
-            z-index: 1;
-            background-color: rgba(0, 0, 0, 0.5);
-            text-align: center;
-            color: #fff;
-            line-height: 65px;
-            font-size: 35px;
-            cursor: pointer;
-        }
     </style>
     <script src="http://code.jquery.com/jquery-1.9.0rc1.js"></script>
     <script type="text/javascript">
@@ -148,7 +125,29 @@
         var start = setInterval(function () { Start() }, 7000);
         var run;
         var check_round_end;
-
+        function Padding() {
+            console.log(atk);
+            if (atk == 1) {
+                for (var i = 0; i < 10; i++) {
+                    var now = document.getElementById("card" + i);
+                    if (now.type == 2) {
+                        now.className = "N";
+                    }
+                    else {
+                        now.className = "card";
+                    }
+                }
+            }
+            else if (atk == 0) {
+                for (var i = 0; i < 10; i++) {
+                    var now = document.getElementById("card" + i);
+                    if (now.type == 1)
+                        now.className = "N";
+                    else
+                        now.className = "card";
+                }
+            }
+        }
         function Check_Round() {
             console.log("start");
             $.ajax({
@@ -173,13 +172,15 @@
                         for (var i = 0; i < 10; i++) {
                             var nowC = document.getElementById("card" + i);
                             if (nowC.innerHTML == "") {
+                                nowC.type = data[3];
                                 nowC.innerHTML = "<img id='" + data[1] + "' src='" + data[2] + "'>";
                                 break;
                             }
                         }
-                        document.getElementById("hp").innerHTML = data[3];
-                        $("#hp").css("width", parseInt(data[3]) / 50 + "%");
-                        document.getElementById("rival-hp").innerHTML = data[4];
+                        document.getElementById("hp").innerHTML = data[4];
+                        document.getElementById("rival-hp").innerHTML = data[5];
+                        atk = !(data[6]);
+                        Padding();
                     }
                 },
                 error: function (jqXHR) {
@@ -202,8 +203,10 @@
                     atk = data[0];
                     for (var i = 0; i < data.length - 1; i++) {
                         var now = document.getElementById("card" + i);
+                        now.type = data[i + 1][2];
                         now.innerHTML = "<img id='" + data[i + 1][0] + "' src='" + data[i + 1][1] + "'>";
                     }
+                    Padding();
                 }
             })
         }
@@ -248,11 +251,14 @@
                 }
             })
         }
-        var nowx = 0, nowy = 0;
         $(function () {
             var _x, _y;
             $(".card").mousedown(function (e) {
                 element = $(this);
+
+                //var class_name = element.attr("class");
+                //if(class_name != "card")
+                //    return;
 
                 _x = e.pageX - parseInt($(this).css("left"));
                 _y = e.pageY - parseInt($(this).css("top"));
@@ -268,59 +274,44 @@
             }).mouseup(function () {
                 console.log("click up", move);
                 $(".moving").css({ display: "none" });
+                //如果再桌子上
                 var desk_x = $(".card-on-desk").offset().left;
                 var desk_y = $(".card-on-desk").offset().top;
                 var desk_w = $(".card-on-desk").width();
                 var desk_h = $(".card-on-desk").height();
                 if (element.offset().left > desk_x && element.offset().left < desk_x + desk_w && element.offset().top > desk_y && element.offset().top < desk_y + desk_h && move) {
-                    //這個now應該是妳後端的
-                    //now.push(parseInt(element.children("img").attr("id")));
-                    var tmp = element.clone();
-                    element.css({ "top": 0, "left": 0 });
-                    $(".mycard").append(tmp);
-                    element.children("img").remove();
-                    var card_x = nowx;
-                    var card_y = nowy;
-                    nowx = nowx + element.height() / 4;
-                    nowy = nowy + element.width() / 4;
-                    tmp.attr("class", "on-desk");
-                    tmp.css({ "top": card_y, "left": card_x, "z-index": 1/*, "transform": "rotate(" + rotate + "deg)"*/ });
-                    move = false;
-                    var id = element.attr("id");
-                    var hand = $("#hands");
-                    for (var i = id.substr(4, 1); i <= 9; i++) {
-                        var now = hand.children("#card" + i);
-                        var next = hand.children("#card" + (parseInt(i) + 1));
-                        now[0].innerHTML = next[0].innerHTML;
-                    }
+                    now.push(parseInt(element.children("img").attr("id")));
+                    //把卡片放到桌子上 並疊在最上面
+                    element.remove();
+                    $(".mycard").append(element);
+                    var card_x = ((Math.random() * 1000) % (50));
+                    var card_y = ((Math.random() * 1000) % (10) + element.height() / 4);
+                    var rotate = ((Math.random() * 1000) % (30) - 15);
+                    //更改卡片類別
+                    element.attr("class", "on-desk");
+                    element.css({ "top": card_y, "left": card_x, "z-index": 1/*, "transform": "rotate(" + rotate + "deg)"*/ });
                 }
                 else if (move) {
                     element.css({ "top": 0, "left": 0 });
-                    move = false;
                 }
+                move = false;
             })
             $(".card").dblclick(function () {
-                var tmp = element.clone();
-                element.css({ "top": 0, "left": 0 });
-                $(".mycard").append(tmp);
-                element.children("img").remove();
-                var card_x = nowx;
-                var card_y = nowy;
-                nowx = nowx + element.height() / 4;
-                nowy = nowy + element.width() / 4;
-                tmp.attr("class", "on-desk");
-                tmp.css({ "top": card_y, "left": card_x, "z-index": 1/*, "transform": "rotate(" + rotate + "deg)"*/ });
-                move = false;
-                var id = element.attr("id");
-                var hand = $("#hands");
-                for (var i = id.substr(4, 1); i <= 9; i++) {
-                    var now = hand.children("#card" + i);
-                    var next = hand.children("#card" + (parseInt(i) + 1));
-                    now[0].innerHTML = next[0].innerHTML;
-                }
+                var element = $(this);
+                now.push(parseInt(element.children("img").attr("id")));
+                element.remove();
+                $(".mycard").append(element);
+                var card_x = ((Math.random() * 1000) % (50));
+                var card_y = ((Math.random() * 1000) % (10) + element.height() / 4);
+                var rotate = ((Math.random() * 1000) % (30) - 15);
+                //更改卡片類別
+                element.attr("class", "on-desk");
+                element.css({ "top": card_y, "left": card_x, "z-index": 1/*, "transform": "rotate(" + rotate + "deg)" */ });
             });
         })
         function post() {
+            //將card class改成N
+            $(".card").attr("class", "N");
             $.ajax({
                 type: "POST",
                 url: "playA.php",
@@ -340,18 +331,11 @@
                 }
             })
         }
-        /*這邊很神奇 你可以打開看看看
-        setInterval(function () {
-            var but = $(".post");
 
-            but.css({ "line-height": but.height(), "font-size": but.height() - 30, "color": "#fff" });
-        }, 1000);
-        */
     </script>
 </head>
 
 <body>
-    <img class="background" src="../background/war-6111531_960_7201.jpg">
 
     <div class="rival" id="rival">
         <img src="">
@@ -372,12 +356,15 @@
     <div class="hands" id="hands" name="hands">
         <div class="card" id="card0">
             <img src="../card/atk/atk_0.png">
+
         </div>
         <div class="card" id="card1">
-            <img src="../card/atk/atk_1.png">
+            <img src="../card/atk/atk_0.png">
+
         </div>
         <div class="card" id="card2">
-            <img src="../card/atk/atk_2.png">
+            <img src="../card/atk/atk_0.png">
+
         </div>
         <div class="card" id="card3"></div>
         <div class="card" id="card4"></div>
@@ -387,7 +374,7 @@
         <div class="card" id="card8"></div>
         <div class="card" id="card9"></div>
     </div>
-    <div class="post" onclick="post()">出牌</div>
+    <input type="button" value="出牌" onclick="post()"></button>
 </body>
 
 </html>
