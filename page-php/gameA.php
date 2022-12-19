@@ -85,11 +85,12 @@
             height: 100px;
         }
         .on-desk {
-            position: absolute;
+            position: relative;
+            display: inline-block;
             width: 50%;
         }
         .on-desk>img {
-            width: 100%;
+            width: 30%;
         }
         .moving {
             display: none;
@@ -162,6 +163,8 @@
                                 break;
                             }
                         }
+                        document.getElementById("hp").innerHTML = data[3];
+                        document.getElementById("rival-hp").innerHTML = data[4];
                     }
                 },
                 error: function(jqXHR){
@@ -218,7 +221,7 @@
                 success: function(data){
                     var rival = document.getElementById("rival-card");
                     for(var i = 0; i < data.length; i++){
-                        rival.innerHTML += "<img id='"+ data[i][0] + "' src='" + data[i][1] + "'>";
+                        rival.innerHTML += "<div class='on-desk'><img id='"+ data[i][0] + "' src='" + data[i][1] + "'></div>";
                     }
                     if(data.length > 0){
                         clearInterval(run);    
@@ -263,7 +266,7 @@
                     var rotate = ((Math.random() * 1000) % (30) - 15);
                     //更改卡片類別
                     element.attr("class", "on-desk");
-                    element.css({ "top": card_y, "left": card_x, "z-index": 1, "transform": "rotate(" + rotate + "deg)" });
+                    element.css({ "top": card_y, "left": card_x, "z-index": 1/*, "transform": "rotate(" + rotate + "deg)"*/ });
                 }
                 else if (move) {
                     element.css({ "top": 0, "left": 0 });
@@ -280,7 +283,7 @@
                 var rotate = ((Math.random() * 1000) % (30) - 15);
                 //更改卡片類別
                 element.attr("class", "on-desk");
-                element.css({ "top": card_y, "left": card_x, "z-index": 1, "transform": "rotate(" + rotate + "deg)" });
+                element.css({ "top": card_y, "left": card_x, "z-index": 1/*, "transform": "rotate(" + rotate + "deg)" */});
             });
         })
         function post(){
@@ -297,7 +300,6 @@
                 success: function(data){
                     // console.log(data);
                     // console.log("sus");
-                    
                 },
                 error: function(jqXHR){
                     // console.log("failed");
