@@ -72,13 +72,13 @@
             position: absolute;
             bottom: 0%;
         }
-        .card>img {
+        .card>img, .N>img {
             width: 100%;
             height: auto;
             background-color: blue;
             pointer-events: none;
         }
-        .card {
+        .card, .N {
             position: relative;
             display: inline-block;
             width: 100px;
@@ -134,7 +134,29 @@
         var start = setInterval(function(){Start()}, 7000);
         var run;
         var check_round_end;
-
+        function Padding(){
+            console.log(atk);
+            if(atk == 1){
+                for(var i = 0; i < 10; i++){
+                    var now = document.getElementById("card" + i);
+                    if(now.type == 2){
+                        now.className = "N";
+                    }
+                    else{
+                        now.className = "card";
+                    }
+                }
+            }
+            else if(atk == 0){
+                for(var i = 0; i < 10; i++){
+                    var now = document.getElementById("card" + i);
+                    if(now.type == 1)
+                        now.className = "N";
+                    else
+                        now.className = "card";
+                }
+            }
+        }
         function Check_Round(){
             console.log("start");
             $.ajax({
@@ -159,12 +181,15 @@
                         for(var i = 0; i < 10; i++){
                             var nowC = document.getElementById("card" + i);
                             if(nowC.innerHTML == ""){
+                                nowC.type = data[3];
                                 nowC.innerHTML = "<img id='"+ data[1] + "' src='" + data[2] + "'>";
                                 break;
                             }
                         }
-                        document.getElementById("hp").innerHTML = data[3];
-                        document.getElementById("rival-hp").innerHTML = data[4];
+                        document.getElementById("hp").innerHTML = data[4];
+                        document.getElementById("rival-hp").innerHTML = data[5];
+                        atk = !(data[6]);
+                        Padding();
                     }
                 },
                 error: function(jqXHR){
@@ -187,8 +212,10 @@
                     atk = data[0];
                     for(var i = 0; i < data.length - 1; i++){
                         var now = document.getElementById("card" + i);
+                        now.type = data[i + 1][2];
                         now.innerHTML = "<img id='"+ data[i + 1][0] + "' src='" + data[i + 1][1] + "'>";
                     }
+                    Padding();
                 }
             })
         }
