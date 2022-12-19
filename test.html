@@ -1,76 +1,21 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>移动div</title>
-    <style type="text/css">
-        body {
-            margin: 0px;
-            padding: 0px;
-            border: none;
-            /*position: relative;*/
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function test(){
+            document.getElementById("test").type = 1;
+            console.log(document.getElementById("test").type);
         }
-
-        .div1 {
-            width: 100px;
-            height: 100px;
-            background: #ff0000;
-            position: relative;
-            top: 0px;
-            left: 0px;
-        }
-
-        .div2 {
-            width: 100px;
-            height: 100px;
-            background: #00ff00;
-            position: relative;
-            top: 0px;
-            left: 110px;
-        }
-
-        .div3 {
-            width: 100px;
-            height: 100px;
-            background: #0000ff;
-            position: relative;
-            top: 0px;
-            left: 220px;
-        }
-    </style>
-    <script src="http://code.jquery.com/jquery-1.9.0rc1.js"></script>
-    <script type="text/javascript">
-		var move=false;
-		var element;
-		$(function(){
-			var _x,_y;
-			$(".card").mousedown(function(e){
-				move = true;
-                console.log("click", move);
-                element = $(this);
-				_x=e.pageX-parseInt($(this).css("left"));
-				_y=e.pageY-parseInt($(this).css("top"));
-			})
-			$(document).mousemove(function(e){
-                console.log("moving", move);
-                if (move){
-					var x = e.pageX-_x;
-					var y = e.pageY-_y;
-					$(element).css({"top":y,"left":x});
-				}
-			}).mouseup(function(){
-                console.log("click up", move);
-                move = false;
-			})
-		})
     </script>
 </head>
-
 <body>
-    <div class="card div1">1</div>
-    <div class="card div2">2</div>
-    <div class="card div3">3</div>
+    <div id="test" type="">
+        <img id="test1" src = "background/war-6111531_960_7201.jpg">
+    </div>
+    <button value="click" onclick="test()">click</button>
 </body>
-
 </html>
