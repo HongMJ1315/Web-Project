@@ -437,14 +437,15 @@
 
             //$(".total").css({ "height": tw * (639 / 960) });
             var bh = $(".post").height();
-            $(".post").css({ "line-height": bh + "px", "font-size": bh - 30 * ((639 / 960)) + "px", "color": "#fff" });
-            $(".surrender ").css({ "line-height": bh + "px", "font-size": bh - 30 * ((639 / 960)) + "px", "color": "#fff" });
+            $(".post").css({ "line-height": bh + "px", "font-size": bh - 40 * ((639 / 960)) + "px", "color": "#fff" });
+            $(".surrender ").css({ "line-height": bh + "px", "font-size": bh - 40 * ((639 / 960)) + "px", "color": "#fff" });
             var deskchild = $(".mycard").children();
             if (deskchild.length > 3) {
                 deskchild.css({
                     "width": "33%"
                 });
             }
+            //sh-40*($(".total").height() / 4- 20)/100 
             $(".hp").css({ "font-size": $(".hp").height() * 0.8 + "px" });
             $(".rival-name").css({ "font-size": $(".rival-name").height() * 0.8 + "px" });
             $(".name").css({ "font-size": $(".name").height() * 0.8 + "px" });
