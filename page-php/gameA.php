@@ -36,9 +36,7 @@
             position: absolute;
             top: 0%;
             left: 0%;
-            width: 100%;
             max-width: 960px;
-            height: 100%;
             max-height: 639px;
             z-index: 1;
         }
@@ -53,7 +51,7 @@
 
         }
 
-        @media (max-width: 960px) {
+        /*@media (max-width: 960px) {
             .total {
                 height: 100%;
                 width: 100%;
@@ -118,18 +116,18 @@
             bottom: 0%;
         }
 
-        .card>img {
+        .card>img, .N>img{
             width: 100%;
             height: auto;
             background-color: blue;
             pointer-events: none;
         }
 
-        .card {
+        .card, .N {
             box-sizing: border-box;
             position: relative;
 
-            width: 10%;
+            width: 12.5%;
             height: auto;
         }
 
@@ -207,6 +205,33 @@
             font-size: 35px;
             cursor: pointer;
         }
+        .atk{
+            position: absolute;
+            top: 85%;
+            left: 80%;
+            width: 10%;
+            height: 10%;
+            z-index: 1;
+            background-color: rgba(0, 0, 0, 0.5);
+            text-align: center;
+            color: #fff;
+            line-height: 65px;
+            font-size: 35px;
+        }
+        .display {
+            position: absolute;
+            top: 10%;
+            left: 40%;
+            width: 25%;
+            height: 25%;
+            display: block;
+            z-index: 2;
+        }
+
+        .display>img {
+            width: 100%;
+            height: auto;
+        }
     </style>
     <script src="http://code.jquery.com/jquery-1.9.0rc1.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
@@ -222,7 +247,7 @@
         function Padding(){
             // console.log(atk);
             if(atk == 1){
-                for(var i = 0; i < 10; i++){
+                for(var i = 0; i < 8; i++){
                     var nowC = document.getElementById("card" + i);
                     if(nowC.type == 2){
                         nowC.className = "N";
@@ -233,7 +258,7 @@
                 }
             }
             else if(atk == 0){
-                for(var i = 0; i < 10; i++){
+                for(var i = 0; i < 8; i++){
                     var nowC = document.getElementById("card" + i);
                     if(nowC.type == 1)
                         nowC.className = "N";
@@ -252,7 +277,7 @@
                     rd: round
                 },
                 success: function(data){
-                    // console.log(data);
+                    console.log(data);
                     if(data[0] == 1){
                         round++;
                         document.getElementById("mycard").innerHTML = "";
@@ -263,7 +288,7 @@
 
                         var cnt = 0;
                         var id = 1;
-                        for(var i = 0; i < 10; i++){
+                        for(var i = 0; i < 8; i++){
                             var nowC = document.getElementById("card" + i);
                             if(nowC.innerHTML == "" && cnt < 4){
                                 nowC.type = data[id][2];
@@ -276,10 +301,38 @@
                             }
                         }
                         document.getElementById("hp").innerHTML = data[5][0];
-                        $("#hp").css("width", parseInt(data[5][0]) / 50 + "%");
+                        // $("#hp").css("width", parseInt(data[5][0]) / 50 + "%");
+                        if(data[5][0] <= 0){
+                            setTimeout(function(){
+                                $.ajax({
+                                    type: "POST",
+                                    url: "init.php",
+                                    dataType: "json",
+                                    success: function(data){
+                                        window.location.href = "defeat.php";
+                                    }
+                                })
+                            }, 3000);
+                        }
                         document.getElementById("rival-hp").innerHTML = data[5][1];
-                        $("#rival-hp").css("width", parseInt(data[5]) / 50 + "%");
+                        // $("#rival-hp").css("width", parseInt(data[5][1]) / 50 + "%");
+                        if(data[5][1] <= 0){
+                            setTimeout(function(){
+                                $.ajax({
+                                    type: "POST",
+                                    url: "init.php",
+                                    dataType: "json",
+                                    success: function(data){
+                                        window.location.href = "victory.php";
+                                    }
+                                })
+                            }, 3000);
+                        }
                         atk = !(data[5][2]);
+                        if(atk == 1)
+                            document.getElementById("atk").innerHTML = "攻方";
+                        else
+                            document.getElementById("atk").innerHTML = "防方";
                         Padding();
                         clearInterval(check_round_end);
                     }
@@ -300,8 +353,11 @@
                 url: "start.php",
                 dataType: "json",
                 success: function(data){
-                    // console.log(data);
                     atk = data[0];
+                    if(atk == 1)
+                        document.getElementById("atk").innerHTML = "攻方";
+                    else
+                        document.getElementById("atk").innerHTML = "防方";
                     for(var i = 0; i < data.length - 1; i++){
                         var nowC = document.getElementById("card" + i);
                         nowC.type = data[i + 1][2];
@@ -311,7 +367,6 @@
                 }
             })
         }
-
         function Start(){
             $.ajax({
                 type: "POST",
@@ -326,8 +381,7 @@
                     }
                 }
             })
-        }//*/
-        // var run = setInterval(function(){getCard()}, 5000);
+        }
 
         function getCard(){
             $.ajax({
@@ -339,6 +393,7 @@
                 },
                 success: function(data){
                     var rival = document.getElementById("rival-card");
+                    console.log(round, data);
                     if(data[0][0] == 1){
                         rival.innerHTML = "<h1>PASS!</h1>";
                     }
@@ -359,14 +414,15 @@
                         for(var i = 1; i < data.length; i++){
                             rival.innerHTML += "<div class='on-desk'><img id='"+ data[i][0] + "' src='" + data[i][1] + "'></div>";
                         }
-                        if(data.length > 1){
-                            clearInterval(run);    
-                        }
                     }
-                    check_round_end = setInterval(function(){Check_Round()}, 10000);
+                    if(data.length > 1){
+                        clearInterval(run);   
+                        if(atk != 0) 
+                            check_round_end = setInterval(function(){Check_Round()}, 10000);
+                    }
                 },
                 error: function(){
-                    // console.log("failed");
+                    console.log("failed");
                 }
             })
         }
@@ -457,6 +513,21 @@
                 }
                 Padding();
             });
+            $(".card").mouseover(function () {
+                var obj = $(this);
+                var tmp = obj.clone();
+                var img = tmp.children("img")[0];
+                $(img).mouseover(function () {
+                    $(".display").css({ "display": "none" });
+                })
+                tmp.css({ "display": "none" });
+                $(".display").html("");
+                $(".display").append(img);
+                $(".display").css({ "display": "block" });
+            })
+            $(".card").mouseout(function () {
+                $(".display").css({ "display": "none" });
+            })
         })
         function post(){
             $.ajax({
@@ -472,7 +543,7 @@
                 },  
                 success: function(data){
                     if(atk == 0){
-                        check_round_end = setInterval(function(){Check_Round()}, 10000);
+                        Check_Round();
                     }
                 },
                 error: function(jqXHR){
@@ -494,17 +565,33 @@
             })
         }
         setInterval(function () {
+            var wh = $(window).height();
+            var ww = $(window).width();
             var th = $(".total").height();
             var tw = $(".total").width();
-            $(".total").css({ "height": tw * (639 / 960) });
+            if (ww / wh > (960 / 639)) {
+                $(".total").css({ "width": wh * (960 / 639) });
+                $(".total").css({ "height": wh });
+            }
+            else {
+                $(".total").css({ "width": ww });
+                $(".total").css({ "height": ww * (639 / 960) });
+            }
+
+            //$(".total").css({ "height": tw * (639 / 960) });
             var bh = $(".post").height();
-            $(".post").css({ "line-height": bh + "px", "font-size": bh - 30 * ((639 / 960)) + "px", "color": "#fff" });
+            $(".post").css({ "line-height": bh + "px", "font-size": bh - 40 * ((639 / 960)) + "px", "color": "#fff" });
+            $(".surrender ").css({ "line-height": bh + "px", "font-size": bh - 40 * ((639 / 960)) + "px", "color": "#fff" });
             var deskchild = $(".mycard").children();
             if (deskchild.length > 3) {
                 deskchild.css({
                     "width": "33%"
                 });
             }
+            //sh-40*($(".total").height() / 4- 20)/100 
+            $(".hp").css({ "font-size": $(".hp").height() * 0.8 + "px" });
+            $(".rival-name").css({ "font-size": $(".rival-name").height() * 0.8 + "px" });
+            $(".name").css({ "font-size": $(".name").height() * 0.8 + "px" });
 
         }, 10);
     </script>
@@ -513,7 +600,7 @@
 <body>
     <div class="total">
         <img class="background" src="../background/war-6111531_960_7201.jpg">
-
+        <div class="display"></div>
         <div class="rival" id="rival">
             <img src="">
             <div class="hp" id="rival-hp" name="rival-hp">50</div>
@@ -539,10 +626,9 @@
             <div class="card" id="card5"></div>
             <div class="card" id="card6"></div>
             <div class="card" id="card7"></div>
-            <div class="card" id="card8"></div>
-            <div class="card" id="card9"></div>
         </div>
         <div class="post" onclick="post()">出牌</div>
+        <div class="atk" id="atk"></div>
         <div class="surrender" onclick="surrender()">投降</div>
     </div>
 </body>
