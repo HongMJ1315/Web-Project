@@ -396,6 +396,7 @@
                     console.log(round, data);
                     if(data[0][0] == 1){
                         rival.innerHTML = "<h1>PASS!</h1>";
+                        check_round_end = setInterval(function(){Check_Round()}, 5000);
                     }
                     else if(data[0][1] == 1){
                         rival.innerHTML = "<h1>對手投降!</h1>"
