@@ -170,6 +170,8 @@
 
         .rival-card {
             position: absolute;
+            display: flex;
+            flex-wrap: wrap;
             top: 0%;
             right: 0%;
             width: 50%;
@@ -218,6 +220,7 @@
             line-height: 65px;
             font-size: 35px;
         }
+
         .display {
             position: absolute;
             top: 10%;
@@ -232,201 +235,16 @@
             width: 100%;
             height: auto;
         }
+
+        .hp_block {
+            background-color: #FF7D7D;
+        }
     </style>
     <script src="http://code.jquery.com/jquery-1.9.0rc1.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script type="text/javascript">
         var move = false;
         var element;
-        var now = [];
-        var round, HP, atk;
-        //*
-        var start = setInterval(function(){Start()}, 7000);
-        var run;
-        var check_round_end;
-        function Padding(){
-            // console.log(atk);
-            if(atk == 1){
-                for(var i = 0; i < 8; i++){
-                    var nowC = document.getElementById("card" + i);
-                    if(nowC.type == 2){
-                        nowC.className = "N";
-                    }
-                    else{
-                        nowC.className = "card";
-                    }
-                }
-            }
-            else if(atk == 0){
-                for(var i = 0; i < 8; i++){
-                    var nowC = document.getElementById("card" + i);
-                    if(nowC.type == 1)
-                        nowC.className = "N";
-                    else
-                        nowC.className = "card";
-                }
-            }
-        }
-        function Check_Round(){
-            // console.log("start");
-            $.ajax({
-                type: "POST",
-                url: "solve.php",
-                dataType: "json",
-                data: {
-                    rd: round
-                },
-                success: function(data){
-                    console.log(data);
-                    if(data[0] == 1){
-                        round++;
-                        document.getElementById("mycard").innerHTML = "";
-                        document.getElementById("rival-card").innerHTML = "";
-                        while(now.length > 0)
-                            now.pop();
-                        run = setInterval(function(){getCard()}, 5000);
-
-                        var cnt = 0;
-                        var id = 1;
-                        for(var i = 0; i < 8; i++){
-                            var nowC = document.getElementById("card" + i);
-                            if(nowC.innerHTML == "" && cnt < 4){
-                                nowC.type = data[id][2];
-                                nowC.innerHTML = "<img id='"+ data[id][0] + "' src='" + data[id][1] + "'>";
-                                id++;
-                                cnt++;
-                            }
-                            else{
-                                cnt++;
-                            }
-                        }
-                        document.getElementById("hp").innerHTML = data[5][0];
-                        // $("#hp").css("width", parseInt(data[5][0]) / 50 + "%");
-                        if(data[5][0] <= 0){
-                            setTimeout(function(){
-                                $.ajax({
-                                    type: "POST",
-                                    url: "init.php",
-                                    dataType: "json",
-                                    success: function(data){
-                                        window.location.href = "defeat.php";
-                                    }
-                                })
-                            }, 3000);
-                        }
-                        document.getElementById("rival-hp").innerHTML = data[5][1];
-                        // $("#rival-hp").css("width", parseInt(data[5][1]) / 50 + "%");
-                        if(data[5][1] <= 0){
-                            setTimeout(function(){
-                                $.ajax({
-                                    type: "POST",
-                                    url: "init.php",
-                                    dataType: "json",
-                                    success: function(data){
-                                        window.location.href = "victory.php";
-                                    }
-                                })
-                            }, 3000);
-                        }
-                        atk = !(data[5][2]);
-                        if(atk == 1)
-                            document.getElementById("atk").innerHTML = "攻方";
-                        else
-                            document.getElementById("atk").innerHTML = "防方";
-                        Padding();
-                        clearInterval(check_round_end);
-                    }
-                },
-                error: function(jqXHR){
-                    // console.log("fail");
-                }
-            })
-        }
-
-        function init(){
-            round = 1;
-            HP = 50;
-            while(now.length > 0)
-                now.pop();
-            $.ajax({
-                type: "POST",
-                url: "start.php",
-                dataType: "json",
-                success: function(data){
-                    atk = data[0];
-                    if(atk == 1)
-                        document.getElementById("atk").innerHTML = "攻方";
-                    else
-                        document.getElementById("atk").innerHTML = "防方";
-                    for(var i = 0; i < data.length - 1; i++){
-                        var nowC = document.getElementById("card" + i);
-                        nowC.type = data[i + 1][2];
-                        nowC.innerHTML = "<img id='"+ data[i + 1][0] + "' src='" + data[i + 1][1] + "'>";
-                    }
-                    Padding();
-                }
-            })
-        }
-        function Start(){
-            $.ajax({
-                type: "POST",
-                url: "check.php",
-                dataType: "json",
-                success: function(data){
-                    if(data == 1){
-                        // console.log("stop");
-                        clearInterval(start);
-                        init();
-                        run = setInterval(function(){getCard()}, 5000);
-                    }
-                }
-            })
-        }
-
-        function getCard(){
-            $.ajax({
-                type: "POST",
-                url: "getCardA.php",
-                dataType: "json",
-                data: {
-                    rd: round
-                },
-                success: function(data){
-                    var rival = document.getElementById("rival-card");
-                    console.log(round, data);
-                    if(data[0][0] == 1){
-                        rival.innerHTML = "<h1>PASS!</h1>";
-                        check_round_end = setInterval(function(){Check_Round()}, 5000);
-                    }
-                    else if(data[0][1] == 1){
-                        rival.innerHTML = "<h1>對手投降!</h1>"
-                        setTimeout(function() {
-                            $.ajax({
-                                type: "POST",
-                                url: "init.php",
-                                dataType: "json",
-                                success: function(data){
-                                    window.location.href = "victory.php";
-                                }
-                            })
-                        }, 5000);
-                    }
-                    else{
-                        for(var i = 1; i < data.length; i++){
-                            rival.innerHTML += "<div class='on-desk'><img id='"+ data[i][0] + "' src='" + data[i][1] + "'></div>";
-                        }
-                    }
-                    if(data.length > 1){
-                        clearInterval(run);   
-                        if(atk != 0) 
-                            check_round_end = setInterval(function(){Check_Round()}, 10000);
-                    }
-                },
-                error: function(){
-                    console.log("failed");
-                }
-            })
-        }
         var nowx = 0, nowy = 0;
         $(function () {
             var _x, _y;
@@ -461,12 +279,8 @@
                     element.css({ "top": 0, "left": 0 });
                     $(".mycard").append(tmp);
                     element.children("img").remove();
-                    var card_x = nowx;
-                    var card_y = nowy;
-                    nowx = nowx + element.height() / 4;
-                    nowy = nowy + element.width() / 4;
                     tmp.attr("class", "on-desk");
-                    tmp.css({ "top": card_y, "left": card_x, "z-index": 1/*, "transform": "rotate(" + rotate + "deg)"*/ });
+                    tmp.css({ "top": 0, "left": 0, "z-index": 1/*, "transform": "rotate(" + rotate + "deg)"*/ });
                     move = false;
                     var id = element.attr("id");
                     var hand = $("#hands");
@@ -530,6 +344,198 @@
                 $(".display").css({ "display": "none" });
             })
         })
+
+        var now = [];
+        var round, HP, atk;
+        var start = setInterval(function(){Start()}, 7000);
+        var run;
+
+        function Padding(){
+            // console.log(atk);
+            if(atk == 1){
+                for(var i = 0; i < 8; i++){
+                    var nowC = document.getElementById("card" + i);
+                    if(nowC.type == 2){
+                        nowC.className = "N";
+                    }
+                    else{
+                        nowC.className = "card";
+                    }
+                }
+            }
+            else if(atk == 0){
+                for(var i = 0; i < 8; i++){
+                    var nowC = document.getElementById("card" + i);
+                    if(nowC.type == 1)
+                        nowC.className = "N";
+                    else
+                        nowC.className = "card";
+                }
+            }
+        }
+
+        function Start(){
+            $.ajax({
+                type: "POST",
+                url: "check.php",
+                dataType: "json",
+                success: function(data){
+                    if(data == 1){
+                        // console.log("stop");
+                        clearInterval(start);
+                        init();
+                    }
+                }
+            })
+        }
+        function init(){
+            round = 1;
+            HP = 50;
+            while(now.length > 0)
+                now.pop();
+            $.ajax({
+                type: "POST",
+                url: "start.php",
+                dataType: "json",
+                success: function(data){
+                    atk = data[0];
+                    if(atk == 1)
+                        document.getElementById("atk").innerHTML = "攻方";
+                    else{
+                        document.getElementById("atk").innerHTML = "防方";
+                        run = setInterval(function(){getCard()}, 5000);
+                    }
+                    for(var i = 0; i < data.length - 1; i++){
+                        var nowC = document.getElementById("card" + i);
+                        nowC.type = data[i + 1][2];
+                        nowC.innerHTML = "<img id='"+ data[i + 1][0] + "' src='" + data[i + 1][1] + "'>";
+                    }
+                    Padding();
+                }
+            })
+        }
+        function Check_Round(){
+            // console.log("start");
+            $.ajax({
+                type: "POST",
+                url: "solve.php",
+                dataType: "json",
+                data: {
+                    rd: round
+                },
+                success: function(data){
+                    // console.log(data);
+                    round++;
+                    document.getElementById("mycard").innerHTML = "";
+                    document.getElementById("rival-card").innerHTML = "";
+                    while(now.length > 0)
+                        now.pop();
+                    
+                    var cnt = 0;
+                    var id = 1;
+                    for(var i = 0; i < 8; i++){
+                        var nowC = document.getElementById("card" + i);
+                        if(nowC.innerHTML == "" && (cnt < 4 || id == 1)){
+                            nowC.type = data[id][2];
+                            nowC.innerHTML = "<img id='"+ data[id][0] + "' src='" + data[id][1] + "'>";
+                            id++, cnt++;
+                        }
+                        else cnt++;
+                    }
+                    document.getElementById("hp").innerHTML = data[5][0];
+                    // $("#hp").css("width", parseInt(data[5][0]) / 50 + "%");
+                    if(data[5][0] <= 0){
+                        setTimeout(function(){
+                            $.ajax({
+                                type: "POST",
+                                url: "init.php",
+                                dataType: "json",
+                                success: function(data){
+                                    window.location.href = "defeat.php";
+                                }
+                            })
+                        }, 3000);
+                    }
+                    document.getElementById("rival-hp").innerHTML = data[5][1];
+                    console.log("rival",data[5][1]);
+                    console.log(data[5][0]);
+                    $("#rival-hp").css("width", parseInt(data[5][1]) *2 + "%");
+                    $("#hp").css("width", parseInt(data[5][0]) *2 + "%");
+                    if(data[5][1] <= 0){
+                        setTimeout(function(){
+                            $.ajax({
+                                type: "POST",
+                                url: "init.php",
+                                dataType: "json",
+                                success: function(data){
+                                    window.location.href = "victory.php";
+                                }
+                            })
+                        }, 3000);
+                    }
+                    atk = !(data[5][2]);
+                    if(atk == 1){
+                        document.getElementById("atk").innerHTML = "攻方";
+                    }
+                    else{
+                        document.getElementById("atk").innerHTML = "防方";
+                        run = setInterval(function(){getCard()}, 5000);
+                    }
+                    Padding();
+                
+                },
+                error: function(jqXHR){
+                    // console.log("fail");
+                }
+            })
+        }
+        function getCard(){
+            $.ajax({
+                type: "POST",
+                url: "getCardA.php",
+                dataType: "json",
+                data: {
+                    rd: round
+                },
+                success: function(data){
+                    // console.log(round, data);
+                    var rival = document.getElementById("rival-card");
+                    if(data[0][0] == 1){
+                        rival.innerHTML = "<h1>PASS!</h1>";
+                        clearInterval(run);
+                        if(atk == 1){
+                            setTimeout(function() {Check_Round()}, 3000);
+                        }
+                    }
+                    else if(data[0][1] == 1){
+                        rival.innerHTML = "<h1>對手投降!</h1>"
+                        setTimeout(function() {
+                            $.ajax({
+                                type: "POST",
+                                url: "init.php",
+                                dataType: "json",
+                                success: function(data){
+                                    window.location.href = "victory.php";
+                                }
+                            })
+                        }, 3000);
+                    }
+                    else{
+                        for(var i = 1; i < data.length; i++){
+                            rival.innerHTML += "<div class='on-desk'><img id='"+ data[i][0] + "' src='" + data[i][1] + "'></div>";
+                        }
+                        if(data.length > 1){
+                            clearInterval(run);   
+                            if(atk == 1) 
+                                setTimeout(function() {Check_Round()}, 3000);
+                        }
+                    }
+                },
+                error: function(){
+                    console.log("failed");
+                }
+            })
+        }
         function post(){
             $.ajax({
                 type: "POST",
@@ -543,7 +549,10 @@
                     len: now.length
                 },  
                 success: function(data){
-                    if(atk == 0){
+                    if(atk == 1){
+                        run = setInterval(function(){getCard()}, 5000);
+                    }
+                    else{
                         Check_Round();
                     }
                 },
@@ -565,6 +574,7 @@
                 }
             })
         }
+
         setInterval(function () {
             var wh = $(window).height();
             var ww = $(window).width();
@@ -583,9 +593,16 @@
             var bh = $(".post").height();
             $(".post").css({ "line-height": bh + "px", "font-size": bh - 40 * ((639 / 960)) + "px", "color": "#fff" });
             $(".surrender ").css({ "line-height": bh + "px", "font-size": bh - 40 * ((639 / 960)) + "px", "color": "#fff" });
+            $(".atk").css({ "line-height": bh + "px", "font-size": bh - 40 * ((639 / 960)) + "px", "color": "#fff"  });
             var deskchild = $(".mycard").children();
             if (deskchild.length > 3) {
                 deskchild.css({
+                    "width": "33%"
+                });
+            }
+            var deskchild2 = $(".rival-card").children();
+            if (deskchild2.length > 3) {
+                deskchild2.css({
                     "width": "33%"
                 });
             }
@@ -593,6 +610,7 @@
             $(".hp").css({ "font-size": $(".hp").height() * 0.8 + "px" });
             $(".rival-name").css({ "font-size": $(".rival-name").height() * 0.8 + "px" });
             $(".name").css({ "font-size": $(".name").height() * 0.8 + "px" });
+            $(".eff").css({ "font-size": $(".eff").height() * 0.8 + "px" });
 
         }, 10);
     </script>
@@ -604,17 +622,24 @@
         <div class="display"></div>
         <div class="rival" id="rival">
             <img src="">
-            <div class="hp" id="rival-hp" name="rival-hp">50</div>
+            <div class="hp_block">
+                <div class="hp" id="rival-hp" name="rival-hp">50</div>
+            </div>
             <div class="rival-name" id="rival-name" name="rival-name">name</div>
+            <!-- 效果在這 -->
+            <div class="eff" id="eff" name="eff"></div>
         </div>
         <div class="ourside" id="ourside" name="ourside">
+            <!-- 效果在這 -->
+            <div class="eff" id="eff" name="eff"></div>
             <div class="name" id="name" name="name">name</div>
-            <div class="hp" id="hp" name="hp">50</div>
+            <div class="hp_block">
+                <div class="hp" id="hp" name="hp">50</div>
+            </div>
             <img src="">
         </div>
         <div class="card-on-desk" id="card-on-desk" name="card-on-desk">
             <div class="rival-card" id="rival-card" name="rival-card"></div>
-            <!-- 牌的顯示太大了 -->
             <div class="mycard" id="mycard" name="mycard"></div>
             <div class="moving">移動到此處按下左鍵</div>
         </div>
