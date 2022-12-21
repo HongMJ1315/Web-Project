@@ -6,14 +6,8 @@ $db = new PDO('mysql: host=localhost; dbname=account', 'root', '801559');
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $round = $_POST['rd'];
     $ret = array();
-    $a = $db->prepare("SELECT round FROM around WHERE round = ?");
-    $b = $db->prepare("SELECT round FROM bround WHERE round = ?");
-    $a->execute(array($round));
-    $b->execute(array($round));
-    $rowA = $a->fetch(PDO::FETCH_OBJ);
-    $rowB = $b->fetch(PDO::FETCH_OBJ);
 
-    array_push($ret, ($rowA && $rowB));
+    array_push($ret, 1);
     
     for ($i = 0; $i < 4; $i++) {
         $ID = rand(1, 49);
