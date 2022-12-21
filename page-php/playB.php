@@ -10,6 +10,9 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
     $card = $_POST['id'];
     $len = $_POST['len'];
 
+    if ($card[0] == 0)
+        $len = 0;
+
     $damage = 0;
     $defense = 0;
     $persist = 0;
@@ -94,5 +97,5 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
             VALUES ($round, $HP, $atk, $card[0], $card[1], $card[2], $card[3], $card[4], $damage, $defense, $persist, $invincible, $lifesteal, $purify, $self_persist, 0, 0)";
     
     $db->exec($sql);
-    echo json_encode(1);
+    echo json_encode($sql);
 }

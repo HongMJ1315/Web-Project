@@ -292,12 +292,10 @@
                 element.css({ "top": 0, "left": 0 });
                 $(".mycard").append(tmp);
                 element.children("img").remove();
-                var card_x = nowx;
-                var card_y = nowy;
                 nowx = nowx + element.height() / 4;
                 nowy = nowy + element.width() / 4;
                 tmp.attr("class", "on-desk");
-                tmp.css({ "top": card_y, "left": card_x, "z-index": 1/*, "transform": "rotate(" + rotate + "deg)"*/ });
+                tmp.css({ "top": 0, "left": 0, "z-index": 1/*, "transform": "rotate(" + rotate + "deg)"*/ });
                 move = false;
                 var id = element.attr("id");
                 var hand = $("#hands");
@@ -332,7 +330,6 @@
         var round, HP, atk;
         var run;
         function Padding(){
-            // console.log(atk);
             if(atk == 1){
                 for(var i = 0; i < 8; i++){
                     var nowC = document.getElementById("card" + i);
@@ -364,7 +361,6 @@
                 url: "start.php",
                 dataType: "json",
                 success: function(data){
-                    // console.log(data);
                     atk = (data[0]) ^ 1;
                     if(atk == 1)
                         document.getElementById("atk").innerHTML = "攻方";
@@ -414,8 +410,8 @@
                     console.log(data[5][1]);
                     document.getElementById("hp").innerHTML = data[5][1];
                     document.getElementById("rival-hp").innerHTML = data[5][0];
-                    $("#hp").css("width", parseInt(data[5][1]) *2 + "%");
-                    $("#rival-hp").css("width", parseInt(data[5][0]) *2 + "%");
+                    $("#hp").css("width", parseInt(data[5][1]) * 2 + "%");
+                    $("#rival-hp").css("width", parseInt(data[5][0]) * 2 + "%");
                     if(data[5][1] <= 0){
                         setTimeout(function(){
                             $.ajax({
@@ -440,14 +436,16 @@
                             })
                         }, 3000);
                     }
-                    atk = data[5][2];
+                    atk = atk ^ 1;
                     if(atk == 1){
                         document.getElementById("atk").innerHTML = "攻方";
                     }
                     else{
                         document.getElementById("atk").innerHTML = "防方";
-                        run = setInterval(function() { getCard();}, 5000);
+                        run = setInterval(function() { getCard()}, 5000);
                     }
+                    document.getElementById("rival-eff").innerHTML = data[5][2];
+                    document.getElementById("eff").innerHTML = data[5][3];
                     Padding();
                 },
                 error: function(jqXHR){
@@ -465,8 +463,8 @@
                     rd: round
                 },
                 success: function(data){
-                    var rival = document.getElementById("rival-card");
                     console.log(round, data);
+                    var rival = document.getElementById("rival-card");
                     if(data[0][0] == 1){
                         rival.innerHTML = "<h1>PASS!</h1>";
                         clearInterval(run);
@@ -475,6 +473,7 @@
                     }
                     else if(data[0][1] == 1){
                         rival.innerHTML = "<h1>對手投降!</h1>";
+                        clearInterval(run);
                         setTimeout(function() {
                             $.ajax({
                                 type: "POST",
@@ -484,7 +483,7 @@
                                     window.location.href = "victory.php";
                                 }
                             })
-                        }, 5000);
+                        }, 3000);
                     }
                     else{
                         for(var i = 1; i < data.length; i++){
@@ -505,6 +504,7 @@
         }
         
         function post(){
+            if(now.length == 0) now.push(0);
             $.ajax({
                 type: "POST",
                 url: "playB.php",
@@ -524,7 +524,7 @@
                     }
                 },
                 error: function(jqXHR){
-                    console.log("fail");
+                    // console.log("failed");
                 }
             })
         }
@@ -593,11 +593,11 @@
             </div>
             <div class="rival-name" id="rival-name" name="rival-name">name</div>
             <!-- 效果在這 -->
-            <div class="eff" id="eff" name="eff"></div>
+            <div class="eff" id="rival-eff" name="eff">0</div>
         </div>
         <div class="ourside" id="ourside" name="ourside">
             <!-- 效果在這 -->
-            <div class="eff" id="eff" name="eff"></div>
+            <div class="eff" id="eff" name="eff">0</div>
             <div class="name" id="name" name="name">name</div>
             <div class="hp_block">
                 <div class="hp" id="hp" name="hp">50</div>

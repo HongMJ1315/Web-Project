@@ -17,15 +17,15 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         array_push($ret, $tmp = array($ID, $CARD->src, $CARD->type));
     }
 
-    $dataA = $db->prepare("SELECT HP, atk FROM around WHERE round = ?");
-    $dataB = $db->prepare("SELECT HP, atk FROM bround WHERE round = ?");
+    $dataA = $db->prepare("SELECT HP, self_persist FROM around WHERE round = ?");
+    $dataB = $db->prepare("SELECT HP, self_persist FROM bround WHERE round = ?");
     $dataA->execute(array($round));
     $dataB->execute(array($round));
 
     $DATAA = $dataA->fetch(PDO::FETCH_OBJ);
     $DATAB = $dataB->fetch(PDO::FETCH_OBJ);
 
-    array_push($ret, $tmp = array($DATAA->HP, $DATAB->HP, $DATAA->atk));
+    array_push($ret, $tmp = array($DATAA->HP, $DATAB->HP, $DATAA->self_persist, $DATAB->self_persist));
 
     echo json_encode($ret);
 }

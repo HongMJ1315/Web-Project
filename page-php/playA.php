@@ -3,13 +3,14 @@ header('Content-Type: application/json; charset=UTF-8');
 
 if($_SERVER['REQUEST_METHOD'] == "POST"){
     $db = new PDO('mysql: host=localhost; dbname=account', 'root', '801559');
-    
+
+    $card = $_POST['card'];
     $round = $_POST['rd'];
-    $HP = $_POST['HP'];
+    $HP = $_POST['hP'];
     $atk = $_POST['atk'];
-    $card = $_POST['id'];
     $len = $_POST['len'];
-    
+
+    if($card[0] == 0) $len = 0;
 
     $damage = 0;
     $defense = 0;
@@ -74,7 +75,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
             }
         }
     }
-
+    $sql;
     if($round == 1){
         if ($len == 0)
             $sql = "UPDATE around SET HP = $HP, self_persist = $self_persist, pass = 1 WHERE round = $round";
@@ -95,7 +96,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
                     damage = $damage, defense = $defense, persist = $persist, invincible = $invincible, lifesteal = $lifesteal, purify = $purify, self_persist = $self_persist, pass = 0 WHERE round = $round";
     } else {
         if($len == 0)
-            $sql = "INSERT INTO bround (round, HP, atk, card1, card2, card3, card4, card5, damage, defense, persist, invincible, lifesteal, purify, self_persist, pass, surrender) 
+            $sql = "INSERT INTO around (round, HP, atk, card1, card2, card3, card4, card5, damage, defense, persist, invincible, lifesteal, purify, self_persist, pass, surrender) 
                     VALUES ($round, $HP, $atk, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, $self_persist, 1, 0)";
         else if ($len == 1)
             $sql = "INSERT INTO around (round, HP, atk, card1, card2, card3, card4, card5, damage, defense, persist, invincible, lifesteal, purify, self_persist, pass, surrender) 
@@ -114,5 +115,5 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
                 VALUES ($round, $HP, $atk, $card[0], $card[1], $card[2], $card[3], $card[4], $damage, $defense, $persist, $invincible, $lifesteal, $purify, $self_persist, 0, 0)";
     }
     $db->exec($sql);
-    echo json_encode(1);
+    echo json_encode($sql);
 }

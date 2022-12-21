@@ -309,12 +309,10 @@
                 element.css({ "top": 0, "left": 0 });
                 $(".mycard").append(tmp);
                 element.children("img").remove();
-                var card_x = nowx;
-                var card_y = nowy;
                 nowx = nowx + element.height() / 4;
                 nowy = nowy + element.width() / 4;
                 tmp.attr("class", "on-desk");
-                tmp.css({ "top": card_y, "left": card_x, "z-index": 1/*, "transform": "rotate(" + rotate + "deg)"*/ });
+                tmp.css({ "top": 0, "left": 0, "z-index": 1/*, "transform": "rotate(" + rotate + "deg)"*/ });
                 move = false;
                 var id = element.attr("id");
                 var hand = $("#hands");
@@ -346,12 +344,11 @@
         })
 
         var now = [];
-        var round, HP, atk;
+        var round, hP, atk;
         var start = setInterval(function(){Start()}, 7000);
         var run;
 
         function Padding(){
-            // console.log(atk);
             if(atk == 1){
                 for(var i = 0; i < 8; i++){
                     var nowC = document.getElementById("card" + i);
@@ -381,7 +378,6 @@
                 dataType: "json",
                 success: function(data){
                     if(data == 1){
-                        // console.log("stop");
                         clearInterval(start);
                         init();
                     }
@@ -390,7 +386,7 @@
         }
         function init(){
             round = 1;
-            HP = 50;
+            hP = 50;
             while(now.length > 0)
                 now.pop();
             $.ajax({
@@ -415,7 +411,6 @@
             })
         }
         function Check_Round(){
-            // console.log("start");
             $.ajax({
                 type: "POST",
                 url: "solve.php",
@@ -473,7 +468,7 @@
                             })
                         }, 3000);
                     }
-                    atk = !(data[5][2]);
+                    atk = atk ^ 1;
                     if(atk == 1){
                         document.getElementById("atk").innerHTML = "攻方";
                     }
@@ -481,6 +476,8 @@
                         document.getElementById("atk").innerHTML = "防方";
                         run = setInterval(function(){getCard()}, 5000);
                     }
+                    document.getElementById("rival-eff").innerHTML = data[5][3];
+                    document.getElementById("eff").innerHTML = data[5][2];
                     Padding();
                 
                 },
@@ -508,7 +505,8 @@
                         }
                     }
                     else if(data[0][1] == 1){
-                        rival.innerHTML = "<h1>對手投降!</h1>"
+                        rival.innerHTML = "<h1>對手投降!</h1>";
+                        clearInterval(run);
                         setTimeout(function() {
                             $.ajax({
                                 type: "POST",
@@ -537,27 +535,29 @@
             })
         }
         function post(){
+            if(now.length == 0) now.push(0);
             $.ajax({
                 type: "POST",
                 url: "playA.php",
                 dataType: "json",
                 data: {
-                    id: now,
+                    card: now,
                     rd: round,
-                    HP: HP, 
+                    hP: hP, 
                     atk: atk,
                     len: now.length
                 },  
                 success: function(data){
+                    console.log(data);
                     if(atk == 1){
                         run = setInterval(function(){getCard()}, 5000);
                     }
                     else{
-                        Check_Round();
+                        setTimeout(function() {Check_Round()}, 3000);
                     }
                 },
                 error: function(jqXHR){
-                    // console.log("failed");
+                    console.log("fail");
                 }
             })
         }
@@ -627,11 +627,11 @@
             </div>
             <div class="rival-name" id="rival-name" name="rival-name">name</div>
             <!-- 效果在這 -->
-            <div class="eff" id="eff" name="eff"></div>
+            <div class="eff" id="rival-eff" name="eff">0</div>
         </div>
         <div class="ourside" id="ourside" name="ourside">
             <!-- 效果在這 -->
-            <div class="eff" id="eff" name="eff"></div>
+            <div class="eff" id="eff" name="eff">0</div>
             <div class="name" id="name" name="name">name</div>
             <div class="hp_block">
                 <div class="hp" id="hp" name="hp">50</div>
