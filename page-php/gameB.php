@@ -340,6 +340,24 @@
             $(".rival-card, .mycard, .hands").delegate(".card, .on-desk, .N", "mouseout", function () {
                 $(".display").css({ "display": "none" });
             })
+            $(".post").mouseover(function () {
+                $(this).css({ "width": "12%", "height": "12%", "top": "44%", "left": "79%" });
+            }).mouseout(function () {
+                $(this).css({ "width": "10%", "height": "10%", "top": "45%", "left": "80%" });
+            }).mousedown(function () {
+                $(this).css({ "width": "12%", "height": "12%", "top": "44%", "left": "79%", "background-color": "rgba(0,0,0,1)" });
+            }).mouseup(function () {
+                $(this).css({ "width": "12%", "height": "12%", "top": "44%", "left": "79%", "background-color": "rgba(0,0,0,0.5)" });
+            })
+            $(".surrender").mouseover(function () {
+                $(this).css({ "width": "12%", "height": "12%", "top": "64%", "left": "79%" });
+            }).mouseout(function () {
+                $(this).css({ "width": "10%", "height": "10%", "top": "65%", "left": "80%" });
+            }).mousedown(function () {
+                $(this).css({ "width": "12%", "height": "12%", "top": "64%", "left": "79%", "background-color": "rgba(0,0,0,1)" });
+            }).mouseup(function () {
+                $(this).css({ "width": "12%", "height": "12%", "top": "64%", "left": "79%", "background-color": "rgba(0,0,0,0.5)" });
+            })
         })
 
         var now = [];
@@ -574,9 +592,11 @@
 
             //$(".total").css({ "height": tw * (639 / 960) });
             var bh = $(".post").height();
+            var bh1 = $(".surrender").height();
+            var bh2 = $(".atk").height();
             $(".post").css({ "line-height": bh + "px", "font-size": bh - 40 * ((639 / 960)) + "px", "color": "#fff" });
-            $(".surrender ").css({ "line-height": bh + "px", "font-size": bh - 40 * ((639 / 960)) + "px", "color": "#fff" });
-            $(".atk").css({"line-height": bh + "px", "font-size": bh - 40 * ((639 / 960)) + "px", "color": "#fff"  });
+            $(".surrender ").css({ "line-height": bh1 + "px", "font-size": bh1 - 40 * ((639 / 960)) + "px", "color": "#fff" });
+            $(".atk").css({ "line-height": bh2 + "px", "font-size": bh2 - 40 * ((639 / 960)) + "px", "color": "#fff"  });
             var deskchild = $(".mycard").children();
             if (deskchild.length > 3) {
                 deskchild.css({
