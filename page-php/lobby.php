@@ -58,12 +58,12 @@
         .start {
             background-color: rgba(0, 0, 0, 0.5);
             background-blend-mode: multiply;
-            width: 300px;
-            height: 100px;
+            width: 10%;
+            height: 10%;
             border: 1px solid #000;
             position: absolute;
-            bottom: 50px;
-            right: 50px;
+            bottom: 5%;
+            right: 5%;
             /*文字在正中間*/
             display: flex;
             justify-content: center;
@@ -90,11 +90,20 @@
                 $(".total").css({ "width": ww });
                 $(".total").css({ "height": ww * (639 / 960) });
             }
-            var sh=$(".start").height();
-            var sw=$(".start").width();
-            $(".start").css({ "width": $(".total").width() / 3 - 20 , "height": $(".total").height() / 4- 20, "font-size": sh-40*($(".total").height() / 4- 20)/100 });
             
         }, 10);
+        $(function(){
+            $(".start").mouseover(function () {
+                $(this).css({ "width": "12%", "height": "12%", "right": "4%", "buttom": "4%" });
+            }).mouseout(function () {
+                $(this).css({ "width": "10%", "height": "10%", "right": "5%", "buttom": "5%" });
+            }).mousedown(function () {
+                $(this).css({ "width": "12%", "height": "12%", "right": "4%", "buttom": "4%", "background-color": "rgba(0,0,0,1)" });
+            }).mouseup(function () {
+                $(this).css({ "width": "12%", "height": "12%", "right": "4%", "buttom": "4%", "background-color": "rgba(0,0,0,0.5)" });
+            })
+        })
+            
         function start(){
             //*
             $.ajax({

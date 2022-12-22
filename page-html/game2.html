@@ -345,6 +345,14 @@
             $(".card").mouseout(function () {
                 $(".display").css({ "display": "none" });
             })
+            $(".post").mouseover(function () {
+                $(this).css({ "width": "12%", "height": "12%" });
+            }).mouseout(function () {
+                $(this).css({ "width": "10%", "height": "10%" });
+            }).click(function () {
+                $(this).css({ "width": "12%", "height": "12%" });
+            })
+
         })
 
         var now = [];
@@ -590,7 +598,7 @@
             $(".hp").css({ "font-size": $(".hp").height() * 0.8 + "px" });
             $(".rival-name").css({ "font-size": $(".rival-name").height() * 0.8 + "px" });
             $(".name").css({ "font-size": $(".name").height() * 0.8 + "px" });
-            $(".eff").css({ "font-size": $(".name").height() * 0.8 + "px" });
+            $(".eff").css({ "font-size": $(".eff").height() * 0.8 + "px" });
 
         }, 10);
     </script>

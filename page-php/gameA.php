@@ -92,7 +92,6 @@
             height: 50%;
             position: absolute;
             bottom: 25%;
-            pointer-events: none;
             left: 25%;
             background-color: rgba(0, 0, 0, 0.5);
         }
@@ -155,6 +154,7 @@
             pointer-events: none;
             box-sizing: border-box;
             color: #fff;
+            z-index: 1;
         }
 
         .mycard {
@@ -165,7 +165,7 @@
             left: 0%;
             width: 50%;
             height: 100%;
-            z-index: 1;
+            z-index: 2;
         }
 
         .rival-card {
@@ -176,7 +176,7 @@
             right: 0%;
             width: 50%;
             height: 100%;
-            z-index: 1;
+            z-index: 2;
         }
 
         .post {
@@ -224,7 +224,7 @@
         .display {
             position: absolute;
             top: 10%;
-            left: 40%;
+            left: 0%;
             width: 25%;
             height: 25%;
             display: block;
@@ -251,7 +251,7 @@
             $(".card").mousedown(function (e) {
                 element = $(this);
                 var className = element.attr("class");
-                if(className != "card")
+                if (className != "card")
                     return;
                 _x = e.pageX - parseInt($(this).css("left"));
                 _y = e.pageY - parseInt($(this).css("top"));
@@ -288,7 +288,7 @@
                         var nowC = hand.children("#card" + i);
                         var next = hand.children("#card" + (parseInt(i) + 1));
                         nowC[0].innerHTML = next[0].innerHTML;
-                        nowC[0].className = next[0].className; 
+                        nowC[0].className = next[0].className;
                         nowC[0].type = next[0].type;
                         // console.log(nowC);
                     }
@@ -302,7 +302,7 @@
             $(".card").dblclick(function () {
                 var element = $(this);
                 var className = element.attr("class");
-                if(className != "card")
+                if (className != "card")
                     return;
                 now.push(parseInt(element.children("img").attr("id")));
                 var tmp = element.clone();
@@ -320,13 +320,13 @@
                     var nowC = hand.children("#card" + i);
                     var next = hand.children("#card" + (parseInt(i) + 1));
                     nowC[0].innerHTML = next[0].innerHTML;
-                    nowC[0].className = next[0].className; 
+                    nowC[0].className = next[0].className;
                     nowC[0].type = next[0].type;
                     // console.log(nowC);
                 }
                 Padding();
             });
-            $(".card").mouseover(function () {
+            /*$(".card,.on-desk").mouseover(function () {
                 var obj = $(this);
                 var tmp = obj.clone();
                 var img = tmp.children("img")[0];
@@ -338,8 +338,42 @@
                 $(".display").append(img);
                 $(".display").css({ "display": "block" });
             })
-            $(".card").mouseout(function () {
+            $(".card,.on-desk").mouseout(function () {
                 $(".display").css({ "display": "none" });
+            })*/
+            $(".rival-card, .mycard, .hands").delegate(".card, .on-desk, .N", "mouseover", function () {
+                console.log("mouseover");
+                var obj = $(this);
+                var tmp = obj.clone();
+                var img = tmp.children("img")[0];
+                $(img).mouseover(function () {
+                    $(".display").css({ "display": "none" });
+                })
+                tmp.css({ "display": "none" });
+                $(".display").html("");
+                $(".display").append(img);
+                $(".display").css({ "display": "block" });
+            })
+            $(".rival-card, .mycard, .hands").delegate(".card, .on-desk, .N", "mouseout", function () {
+                $(".display").css({ "display": "none" });
+            })
+            $(".post").mouseover(function () {
+                $(this).css({ "width": "12%", "height": "12%", "top": "44%", "left": "79%" });
+            }).mouseout(function () {
+                $(this).css({ "width": "10%", "height": "10%", "top": "45%", "left": "80%" });
+            }).mousedown(function () {
+                $(this).css({ "width": "12%", "height": "12%", "top": "44%", "left": "79%", "background-color": "rgba(0,0,0,1)" });
+            }).mouseup(function () {
+                $(this).css({ "width": "12%", "height": "12%", "top": "44%", "left": "79%", "background-color": "rgba(0,0,0,0.5)" });
+            })
+            $(".surrender").mouseover(function () {
+                $(this).css({ "width": "12%", "height": "12%", "top": "64%", "left": "79%" });
+            }).mouseout(function () {
+                $(this).css({ "width": "10%", "height": "10%", "top": "65%", "left": "80%" });
+            }).mousedown(function () {
+                $(this).css({ "width": "12%", "height": "12%", "top": "64%", "left": "79%", "background-color": "rgba(0,0,0,1)" });
+            }).mouseup(function () {
+                $(this).css({ "width": "12%", "height": "12%", "top": "64%", "left": "79%", "background-color": "rgba(0,0,0,0.5)" });
             })
         })
 
@@ -591,9 +625,11 @@
 
             //$(".total").css({ "height": tw * (639 / 960) });
             var bh = $(".post").height();
+            var bh1 = $(".surrender").height();
+            var bh2 = $(".atk").height();
             $(".post").css({ "line-height": bh + "px", "font-size": bh - 40 * ((639 / 960)) + "px", "color": "#fff" });
-            $(".surrender ").css({ "line-height": bh + "px", "font-size": bh - 40 * ((639 / 960)) + "px", "color": "#fff" });
-            $(".atk").css({ "line-height": bh + "px", "font-size": bh - 40 * ((639 / 960)) + "px", "color": "#fff"  });
+            $(".surrender ").css({ "line-height": bh1 + "px", "font-size": bh1 - 40 * ((639 / 960)) + "px", "color": "#fff" });
+            $(".atk").css({ "line-height": bh2 + "px", "font-size": bh2 - 40 * ((639 / 960)) + "px", "color": "#fff"  });
             var deskchild = $(".mycard").children();
             if (deskchild.length > 3) {
                 deskchild.css({
