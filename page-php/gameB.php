@@ -76,7 +76,6 @@
             height: 50%;
             position: absolute;
             bottom: 25%;
-            pointer-events: none;
             left: 25%;
             background-color: rgba(0, 0, 0, 0.5);
         }
@@ -139,6 +138,7 @@
             pointer-events: none;
             box-sizing: border-box;
             color: #fff;
+            z-index: 1;
         }
 
         .mycard {
@@ -149,7 +149,7 @@
             left: 0%;
             width: 50%;
             height: 100%;
-            z-index: 1;
+            z-index: 2;
         }
 
         .rival-card {
@@ -160,7 +160,7 @@
             right: 0%;
             width: 50%;
             height: 100%;
-            z-index: 1;
+            z-index: 2;
         }
 
         .post {
@@ -207,7 +207,7 @@
         .display {
             position: absolute;
             top: 10%;
-            left: 40%;
+            left: 0%;
             width: 25%;
             height: 25%;
             display: block;
@@ -234,7 +234,7 @@
             $(".card").mousedown(function (e) {
                 element = $(this);
                 var className = element.attr("class");
-                if(className != "card")
+                if (className != "card")
                     return;
                 _x = e.pageX - parseInt($(this).css("left"));
                 _y = e.pageY - parseInt($(this).css("top"));
@@ -271,7 +271,7 @@
                         var nowC = hand.children("#card" + i);
                         var next = hand.children("#card" + (parseInt(i) + 1));
                         nowC[0].innerHTML = next[0].innerHTML;
-                        nowC[0].className = next[0].className; 
+                        nowC[0].className = next[0].className;
                         nowC[0].type = next[0].type;
                         // console.log(nowC);
                     }
@@ -285,7 +285,7 @@
             $(".card").dblclick(function () {
                 var element = $(this);
                 var className = element.attr("class");
-                if(className != "card")
+                if (className != "card")
                     return;
                 now.push(parseInt(element.children("img").attr("id")));
                 var tmp = element.clone();
@@ -303,13 +303,13 @@
                     var nowC = hand.children("#card" + i);
                     var next = hand.children("#card" + (parseInt(i) + 1));
                     nowC[0].innerHTML = next[0].innerHTML;
-                    nowC[0].className = next[0].className; 
+                    nowC[0].className = next[0].className;
                     nowC[0].type = next[0].type;
                     // console.log(nowC);
                 }
                 Padding();
             });
-            $(".card").mouseover(function () {
+            /*$(".card,.on-desk").mouseover(function () {
                 var obj = $(this);
                 var tmp = obj.clone();
                 var img = tmp.children("img")[0];
@@ -321,7 +321,23 @@
                 $(".display").append(img);
                 $(".display").css({ "display": "block" });
             })
-            $(".card").mouseout(function () {
+            $(".card,.on-desk").mouseout(function () {
+                $(".display").css({ "display": "none" });
+            })*/
+            $(".rival-card, .mycard, .hands").delegate(".card, .on-desk, .N", "mouseover", function () {
+                console.log("mouseover");
+                var obj = $(this);
+                var tmp = obj.clone();
+                var img = tmp.children("img")[0];
+                $(img).mouseover(function () {
+                    $(".display").css({ "display": "none" });
+                })
+                tmp.css({ "display": "none" });
+                $(".display").html("");
+                $(".display").append(img);
+                $(".display").css({ "display": "block" });
+            })
+            $(".rival-card, .mycard, .hands").delegate(".card, .on-desk, .N", "mouseout", function () {
                 $(".display").css({ "display": "none" });
             })
         })

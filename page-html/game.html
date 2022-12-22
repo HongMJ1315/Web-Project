@@ -61,7 +61,7 @@
                 width: 100%;
                 height: auto;
             }
-        }*/
+        }
 
         /*
         @media (max-height: 500px) {
@@ -92,7 +92,6 @@
             height: 50%;
             position: absolute;
             bottom: 25%;
-            pointer-events: none;
             left: 25%;
             background-color: rgba(0, 0, 0, 0.5);
         }
@@ -103,7 +102,6 @@
             width: 100%;
             height: 10%;
             background-color: red;
-            color: #3e3e3e;
         }
 
 
@@ -117,22 +115,7 @@
             bottom: 0%;
         }
 
-        .card>img {
-            width: 100%;
-            height: auto;
-            background-color: blue;
-            pointer-events: none;
-        }
-
-        .card {
-            box-sizing: border-box;
-            position: relative;
-
-            width: 12.5%;
-            height: auto;
-        }
-
-
+        .card>img,
         .N>img {
             width: 100%;
             height: auto;
@@ -140,6 +123,7 @@
             pointer-events: none;
         }
 
+        .card,
         .N {
             box-sizing: border-box;
             position: relative;
@@ -172,6 +156,7 @@
             pointer-events: none;
             box-sizing: border-box;
             color: #fff;
+            z-index: 1;
         }
 
         .mycard {
@@ -182,7 +167,7 @@
             left: 0%;
             width: 50%;
             height: 100%;
-            z-index: 1;
+            z-index: 2;
         }
 
         .rival-card {
@@ -193,7 +178,7 @@
             right: 0%;
             width: 50%;
             height: 100%;
-            z-index: 1;
+            z-index: 2;
         }
 
         .post {
@@ -211,21 +196,6 @@
             cursor: pointer;
         }
 
-        .display {
-            position: absolute;
-            top: 10%;
-            left: 40%;
-            width: 25%;
-            height: 25%;
-            display: block;
-            z-index: 2;
-        }
-
-        .display>img {
-            width: 100%;
-            height: auto;
-        }
-
         .surrender {
             position: absolute;
             top: 65%;
@@ -241,10 +211,6 @@
             cursor: pointer;
         }
 
-        .hp_block {
-            background-color: #FF7D7D;
-        }
-
         .atk {
             position: absolute;
             top: 85%;
@@ -257,6 +223,25 @@
             color: #fff;
             line-height: 65px;
             font-size: 35px;
+        }
+
+        .display {
+            position: absolute;
+            top: 10%;
+            left: 2.5%;
+            width: 25%;
+            height: 25%;
+            display: block;
+            z-index: 2;
+        }
+
+        .display>img {
+            width: 100%;
+            height: auto;
+        }
+
+        .hp_block {
+            background-color: #FF7D7D;
         }
     </style>
     <script src="http://code.jquery.com/jquery-1.9.0rc1.js"></script>
@@ -328,12 +313,10 @@
                 element.css({ "top": 0, "left": 0 });
                 $(".mycard").append(tmp);
                 element.children("img").remove();
-                var card_x = nowx;
-                var card_y = nowy;
                 nowx = nowx + element.height() / 4;
                 nowy = nowy + element.width() / 4;
                 tmp.attr("class", "on-desk");
-                tmp.css({ "top": card_y, "left": card_x, "z-index": 1/*, "transform": "rotate(" + rotate + "deg)"*/ });
+                tmp.css({ "top": 0, "left": 0, "z-index": 1/*, "transform": "rotate(" + rotate + "deg)"*/ });
                 move = false;
                 var id = element.attr("id");
                 var hand = $("#hands");
@@ -347,7 +330,7 @@
                 }
                 Padding();
             });
-            $(".card").mouseover(function () {
+            /*$(".card,.on-desk").mouseover(function () {
                 var obj = $(this);
                 var tmp = obj.clone();
                 var img = tmp.children("img")[0];
@@ -359,18 +342,33 @@
                 $(".display").append(img);
                 $(".display").css({ "display": "block" });
             })
-            $(".card").mouseout(function () {
+            $(".card,.on-desk").mouseout(function () {
+                $(".display").css({ "display": "none" });
+            })*/
+            $(".rival-card, .mycard, .hands").delegate(".card, .on-desk, .N", "mouseover", function () {
+                console.log("mouseover");
+                var obj = $(this);
+                var tmp = obj.clone();
+                var img = tmp.children("img")[0];
+                $(img).mouseover(function () {
+                    $(".display").css({ "display": "none" });
+                })
+                tmp.css({ "display": "none" });
+                $(".display").html("");
+                $(".display").append(img);
+                $(".display").css({ "display": "block" });
+            })
+            $(".rival-card, .mycard, .hands").delegate(".card, .on-desk, .N", "mouseout", function () {
                 $(".display").css({ "display": "none" });
             })
         })
 
         var now = [];
-        var round, HP, atk;
+        var round, hP, atk;
         var start = setInterval(function () { Start() }, 7000);
         var run;
 
         function Padding() {
-            // console.log(atk);
             if (atk == 1) {
                 for (var i = 0; i < 8; i++) {
                     var nowC = document.getElementById("card" + i);
@@ -400,7 +398,6 @@
                 dataType: "json",
                 success: function (data) {
                     if (data == 1) {
-                        // console.log("stop");
                         clearInterval(start);
                         init();
                     }
@@ -409,7 +406,7 @@
         }
         function init() {
             round = 1;
-            HP = 50;
+            hP = 50;
             while (now.length > 0)
                 now.pop();
             $.ajax({
@@ -434,7 +431,6 @@
             })
         }
         function Check_Round() {
-            // console.log("start");
             $.ajax({
                 type: "POST",
                 url: "solve.php",
@@ -476,10 +472,10 @@
                         }, 3000);
                     }
                     document.getElementById("rival-hp").innerHTML = data[5][1];
-
-                    $("#hp").css("width", parseInt(data[5][0]) / 50 + "%");
-                    $("#rival-hp").css("width", parseInt(data[5][1]) / 50 + "%");
-
+                    console.log("rival", data[5][1]);
+                    console.log(data[5][0]);
+                    $("#rival-hp").css("width", parseInt(data[5][1]) * 2 + "%");
+                    $("#hp").css("width", parseInt(data[5][0]) * 2 + "%");
                     if (data[5][1] <= 0) {
                         setTimeout(function () {
                             $.ajax({
@@ -492,7 +488,7 @@
                             })
                         }, 3000);
                     }
-                    atk = !(data[5][2]);
+                    atk = atk ^ 1;
                     if (atk == 1) {
                         document.getElementById("atk").innerHTML = "攻方";
                     }
@@ -500,6 +496,8 @@
                         document.getElementById("atk").innerHTML = "防方";
                         run = setInterval(function () { getCard() }, 5000);
                     }
+                    document.getElementById("rival-eff").innerHTML = data[5][3];
+                    document.getElementById("eff").innerHTML = data[5][2];
                     Padding();
 
                 },
@@ -527,7 +525,8 @@
                         }
                     }
                     else if (data[0][1] == 1) {
-                        rival.innerHTML = "<h1>對手投降!</h1>"
+                        rival.innerHTML = "<h1>對手投降!</h1>";
+                        clearInterval(run);
                         setTimeout(function () {
                             $.ajax({
                                 type: "POST",
@@ -556,27 +555,29 @@
             })
         }
         function post() {
+            if (now.length == 0) now.push(0);
             $.ajax({
                 type: "POST",
                 url: "playA.php",
                 dataType: "json",
                 data: {
-                    id: now,
+                    card: now,
                     rd: round,
-                    HP: HP,
+                    hP: hP,
                     atk: atk,
                     len: now.length
                 },
                 success: function (data) {
+                    console.log(data);
                     if (atk == 1) {
                         run = setInterval(function () { getCard() }, 5000);
                     }
                     else {
-                        Check_Round();
+                        setTimeout(function () { Check_Round() }, 3000);
                     }
                 },
                 error: function (jqXHR) {
-                    // console.log("failed");
+                    console.log("fail");
                 }
             })
         }
@@ -612,9 +613,16 @@
             var bh = $(".post").height();
             $(".post").css({ "line-height": bh + "px", "font-size": bh - 40 * ((639 / 960)) + "px", "color": "#fff" });
             $(".surrender ").css({ "line-height": bh + "px", "font-size": bh - 40 * ((639 / 960)) + "px", "color": "#fff" });
+            $(".atk").css({ "line-height": bh + "px", "font-size": bh - 40 * ((639 / 960)) + "px", "color": "#fff" });
             var deskchild = $(".mycard").children();
             if (deskchild.length > 3) {
                 deskchild.css({
+                    "width": "33%"
+                });
+            }
+            var deskchild2 = $(".rival-card").children();
+            if (deskchild2.length > 3) {
+                deskchild2.css({
                     "width": "33%"
                 });
             }
@@ -622,7 +630,7 @@
             $(".hp").css({ "font-size": $(".hp").height() * 0.8 + "px" });
             $(".rival-name").css({ "font-size": $(".rival-name").height() * 0.8 + "px" });
             $(".name").css({ "font-size": $(".name").height() * 0.8 + "px" });
-            $(".eff").css({ "font-size": $(".name").height() * 0.8 + "px" });
+            $(".eff").css({ "font-size": $(".eff").height() * 0.8 + "px" });
 
         }, 10);
     </script>
@@ -638,10 +646,12 @@
                 <div class="hp" id="rival-hp" name="rival-hp">50</div>
             </div>
             <div class="rival-name" id="rival-name" name="rival-name">name</div>
-            <div class="eff" id="eff" name="eff"></div>
+            <!-- 效果在這 -->
+            <div class="eff" id="rival-eff" name="eff">0</div>
         </div>
         <div class="ourside" id="ourside" name="ourside">
-            <div class="eff" id="eff" name="eff"></div>
+            <!-- 效果在這 -->
+            <div class="eff" id="eff" name="eff">0</div>
             <div class="name" id="name" name="name">name</div>
             <div class="hp_block">
                 <div class="hp" id="hp" name="hp">50</div>
@@ -654,7 +664,9 @@
             <div class="moving">移動到此處按下左鍵</div>
         </div>
         <div class="hands" id="hands" name="hands">
-            <div class="card" id="card0"></div>
+            <div class="card" id="card0">
+                <img src="../card/atk/atk_1.png">
+            </div>
             <div class="card" id="card1"></div>
             <div class="card" id="card2"></div>
             <div class="card" id="card3"></div>
