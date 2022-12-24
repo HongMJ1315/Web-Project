@@ -4,25 +4,92 @@
 <head>
     <meta charset="utf-8">
     <title>Game</title>
+    <script src="http://code.jquery.com/jquery-1.9.0rc1.js"></script>
     <style>
-        .error{
+        .error {
             color: red;
+        }
+
+        .background {
+            position: absolute;
+            pointer-events: none;
+            height: 100%;
+            top: 0%;
+            left: 0%;
+            background-color: rgba(0, 0, 0, 0.5);
+
+        }
+
+        .login {
+            position: absolute;
+            background-color: #7c7153;
+            width: 30%;
+            right: 0%;
+            bottom: 10%;
+        }
+
+        form {
+            position: relative;
+        }
+
+        button {
+            right: 0%;
+        }
+
+        .total {
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            max-width: 1280px;
+            max-height: 959px;
+            z-index: 1;
         }
     </style>
     <script>
+        setInterval(function () {
+            var wh = $(window).height();
+            var ww = $(window).width();
+            var th = $(".total").height();
+            var tw = $(".total").width();
+            if (ww / wh > (1280 / 959)) {
+                $(".total").css({ "width": wh * (1280 / 959) });
+                $(".total").css({ "height": wh });
+            }
+            else {
+                $(".total").css({ "width": ww });
+                $(".total").css({ "height": ww * (959 / 1280) });
+            }
+            var sh = $(".start").height();
+            var sw = $(".start").width();
+            $(".start").css({ "width": $(".total").width() / 3 - 20, "height": $(".total").height() / 4 - 20, "font-size": sh - 40 * ($(".total").height() / 4 - 20) / 100 });
+            var lw = $(".login").width();
+            var lh = $(".login").height();
+            var iw = $("#id").width();
+            var ih = $("#id").height();
+            console.log(lw, lh, iw, ih);
+            if (lw < 150) {
+                $(".user").css({ "width": lw - 20 });
+            }
+            else {
+                $(".user").css({ "width": 140 });
+            }
+        }, 10);
     </script>
 </head>
 
 <body>
-    <div>
-        <form method="post" action="login.php" name="login" id="form">
-            user name：<input type="text" name="username" id="id"></br>
-            password：<input type="password" name="password"></br>
-            <button id="start">Join</button>
-        </form>
-        <form action="sign_up.php" name=sign_up>
-            <button id="sign">sign up</button>
-        </form>
+    <div class="total">
+        <img src="../background/login.jpg" class="background">
+        <div class="login">
+            <form method="post" action="login.php" name="login" id="form">
+                user name：<input type="text" name="username" id="id" class="user"></br>
+                password：<input type="password" name="password" class="user"></br>
+                <button id="start">Join</button>
+            </form>
+            <form action="sign_up.php" name=sign_up id="but">
+                <button id="sign">sign up</button>
+            </form>
+        </div>
         <?php
         session_start();
         if (isset($_POST['username'], $_POST['password'])) {
