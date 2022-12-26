@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Game Lobby</title>
+    <title>歐勒の趟</title>
     <style>
         /*背景圖案 背景淡化0.5*/
         body {
@@ -139,14 +139,14 @@
 <body>
     <div class="total">
         <img class="background" src="../background/bombed-932108_960_720.jpg">
-        <div class="link">
+        <!-- <div class="link">
             <a  href="https://github.com/xiaoyo123/Web-Project">
                 <img class="icon" src="https://miro.medium.com/max/1400/0*c43pw7UiQgpfjDCl.jpg">
             </a>
             <a href="https://1drv.ms/p/s!AuERejR772uKi85Rt4_vvpK2xk6MQw">
                 <img class="icon" src="https://icons.iconarchive.com/icons/carlosjj/microsoft-office-2013/256/PowerPoint-icon.png">
             </a>
-        </div> 
+        </div>  -->
         <div class="start" onclick="start()">
             start
         </div>

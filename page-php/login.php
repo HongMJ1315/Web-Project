@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Game</title>
+    <title>歐勒の趟</title>
     <script src="http://code.jquery.com/jquery-1.9.0rc1.js"></script>
     <style>
         .error {
@@ -44,6 +44,19 @@
             max-height: 959px;
             z-index: 1;
         }
+
+        .link{
+            position: absolute;
+            left : 0%;
+            bottom: 0%;
+            height :10%;
+            display: flex;
+            flex-wrap: nowrap;
+        }
+        
+        .icon{
+            height: 100%
+        }
     </style>
     <script>
         setInterval(function () {
@@ -80,6 +93,14 @@
 <body>
     <div class="total">
         <img src="../background/login.jpg" class="background">
+        <div class="link">
+            <a  href="https://github.com/xiaoyo123/Web-Project">
+                <img class="icon" src="https://miro.medium.com/max/1400/0*c43pw7UiQgpfjDCl.jpg">
+            </a>
+            <a href="https://1drv.ms/p/s!AuERejR772uKi85Rt4_vvpK2xk6MQw">
+                <img class="icon" src="https://icons.iconarchive.com/icons/carlosjj/microsoft-office-2013/256/PowerPoint-icon.png">
+            </a>
+        </div> 
         <div class="login">
             <form method="post" action="login.php" name="login" id="form">
                 user name：<input type="text" name="username" id="id" class="user"></br>

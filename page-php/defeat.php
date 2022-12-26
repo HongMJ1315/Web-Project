@@ -3,6 +3,7 @@
 <html>
 
 <head>
+    <title>歐勒の趟</title>
     <meta charset="utf-8">
     <title>Game Lobby</title>
     <style>
