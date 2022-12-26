@@ -4,11 +4,7 @@
 <head>
     <meta charset="utf-8">
     <title>Game</title>
-   <style>
-        .error {
-            color: red;
-        }
-
+    <style>
         .background {
             position: absolute;
             pointer-events: none;
@@ -19,12 +15,10 @@
 
         }
 
-        .signed {
+        .login {
             position: absolute;
             background-color: #7c7153;
             width: 30%;
-            right: 0%;
-            bottom: 10%;
         }
 
         form {
@@ -51,35 +45,52 @@
             var ww = $(window).width();
             var th = $(".total").height();
             var tw = $(".total").width();
-            if (ww / wh > (1280 / 959)) {
-                $(".total").css({ "width": wh * (1280 / 959) });
+            if (ww / wh > (960 / 639)) {
+                $(".total").css({ "width": wh * (960 / 639) });
                 $(".total").css({ "height": wh });
             }
             else {
                 $(".total").css({ "width": ww });
-                $(".total").css({ "height": ww * (959 / 1280) });
+                $(".total").css({ "height": ww * (639 / 960) });
             }
-            var sh = $(".start").height();
-            var sw = $(".start").width();
-            $(".start").css({ "width": $(".total").width() / 3 - 20, "height": $(".total").height() / 4 - 20, "font-size": sh - 40 * ($(".total").height() / 4 - 20) / 100 });
-            var lw = $(".login").width();
-            var lh = $(".login").height();
-            var iw = $("#id").width();
-            var ih = $("#id").height();
-            if (lw < 150) {
-                $(".user").css({ "width": lw - 20 });
-            }
-            else {
-                $(".user").css({ "width": 140 });
-            }
+
         }, 10);
+        $(function () {
+            $(".start").mouseover(function () {
+                $(this).css({ "width": "12%", "height": "12%", "right": "4%", "buttom": "4%" });
+            }).mouseout(function () {
+                $(this).css({ "width": "10%", "height": "10%", "right": "5%", "buttom": "5%" });
+            }).mousedown(function () {
+                $(this).css({ "width": "12%", "height": "12%", "right": "4%", "buttom": "4%", "background-color": "rgba(0,0,0,1)" });
+            }).mouseup(function () {
+                $(this).css({ "width": "12%", "height": "12%", "right": "4%", "buttom": "4%", "background-color": "rgba(0,0,0,0.5)" });
+            })
+        })
+
+        function start() {
+            //*
+            $.ajax({
+                type: "POST",
+                url: "check.php",
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    if (data == 1) {
+                        alert("busy line");
+                    }
+                    else {
+                        window.location.href = "gameA.php";
+                    }
+                }
+            })//*/
+        }
     </script>
 </head>
 
 <body>
     <div class="total">
         <img src="../background/login.jpg" class="background">
-        <div class="signed">
+
         <form method="post" action="sign_up.php" name="login" id="form">
             user name：<input type="text" name="username" id="id"></br>
             password：<input type="password" name="password"></br>
@@ -109,7 +120,6 @@
             }
             ?>
         </form>
-        </div>
     </div>
 </body>
 
