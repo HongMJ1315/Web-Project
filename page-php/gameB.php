@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <title>歐勒の趟</title>
     <?php
     session_start();
     if (isset($_SESSION['username'])) 
