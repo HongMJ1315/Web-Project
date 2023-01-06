@@ -326,7 +326,7 @@
                 $(".display").css({ "display": "none" });
             })*/
             $(".rival-card, .mycard, .hands").delegate(".card, .on-desk, .N", "mouseover", function () {
-                console.log("mouseover");
+                // console.log("mouseover");
                 var obj = $(this);
                 var tmp = obj.clone();
                 var img = tmp.children("img")[0];
@@ -441,8 +441,8 @@
                         }
                         else cnt++;
                     }
-                    console.log("rival",data[5][0]);
-                    console.log(data[5][1]);
+                    // console.log("rival",data[5][0]);
+                    // console.log(data[5][1]);
                     document.getElementById("hp").innerHTML = data[5][1];
                     document.getElementById("rival-hp").innerHTML = data[5][0];
                     $("#hp").css("width", parseInt(data[5][1]) * 2 + "%");
@@ -498,7 +498,7 @@
                     rd: round
                 },
                 success: function(data){
-                    console.log(round, data);
+                    // console.log(round, data);
                     var rival = document.getElementById("rival-card");
                     if(data[0][0] == 1){
                         rival.innerHTML = "<h1>PASS!</h1>";
@@ -533,7 +533,7 @@
                     }
                 },
                 error: function(){
-                    console.log("failed");
+                    // console.log("failed");
                 }
             })
         }
@@ -616,11 +616,30 @@
             $(".name").css({ "font-size": $(".name").height() * 0.8 + "px" });
             $(".eff").css({ "font-size": $(".name").height() * 0.8 + "px" });
         }, 10);
+
+         var t1 = 3e3;//如果是轮询，这个时间必须大于音频的长度。如果是webscoket，应该设置一个状态play，避免重复播放，如下：
+        var play = false;
+        function PLAYBGM(){
+            var audio = document.getElementById('bgm');
+            if(play){
+                return false;
+            }
+            audio.currentTime = 0;//设置播放的音频的起始时间
+            audio.volume = 0.5;//设置音频的声音大小
+            audio.muted = false;//关闭静音状态
+            play = true;
+
+        }
+        setInterval(function(){
+            PLAYBGM();//假装在轮询服务器，或者从websocket拉取数据
+            console.log(play);
+        },t1);
     </script>
 </head>
 
 <body onload = init()>
     <div class="total">
+
         <img class="background" src="../background/war-6111531_960_7201.jpg">
         <div class="display"></div>
         <div class="rival" id="rival">
@@ -660,6 +679,10 @@
         <div class="atk" id="atk"></div>
         <div class="surrender" onclick="surrender()">投降</div>
     </div>
+    <audio id="bgm"  muted autoplay loop>
+            <source src="BGM.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+    </audio>
 </body>
 
 </html>

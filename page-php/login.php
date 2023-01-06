@@ -79,7 +79,7 @@
             var lh = $(".login").height();
             var iw = $("#id").width();
             var ih = $("#id").height();
-            console.log(lw, lh, iw, ih);
+            // console.log(lw, lh, iw, ih);
             if (lw < 150) {
                 $(".user").css({ "width": lw - 20 });
             }
