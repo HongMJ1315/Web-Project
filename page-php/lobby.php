@@ -123,7 +123,7 @@
                 url: "check.php",
                 dataType: "json",
                 success: function(data){
-                    console.log(data);
+                    // console.log(data);
                     if(data == 1){
                         alert("busy line");
                     }
