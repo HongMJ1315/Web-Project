@@ -1,8 +1,10 @@
 # 歐勒の趟(俺のターン)
 ## 組員: 01057020 林佑丞 01057033 洪銘均
-<a href="https://hackmd.io/@HongMJ1315/BkFdUuj_i">遊戲規則</a>
+<a href="https://hackmd.io/@HongMJ1315/BkFdUuj_i">
+<img src='https://img.shields.io/badge/%E9%81%8A%E6%88%B2%E8%A6%8F%E5%89%87-MD-green?style=for-the-badge&logo=Google%20chrome&logoColor=white&labelColor=66cc00&color=94DD15'>
+</a>
+<a href="https://youtu.be/ZzHHuSo3XV8?si=mzTJaTJZfV7GKMkB"><img alt="youtube views" src="https://img.shields.io/youtube/views/ZzHHuSo3XV8?logo=youtube&labelColor=ce4630&style=for-the-badge"/></a>
 
-<a href="https://youtu.be/ZzHHuSo3XV8?si=mzTJaTJZfV7GKMkB"><img alt="youtube views" title="Subscribe to my YouTube channel" src="https://img.shields.io/youtube/views/ZzHHuSo3XV8?si=mzTJaTJZfV7GKMkB?logo=youtube&labelColor=ce4630&style=for-the-badge"/></a>
 
 ## 執行
 1. 請先在資料庫建立account資料庫，匯入account-db_2022_12_31.sql
