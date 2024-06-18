@@ -1,7 +1,7 @@
 # 歐勒の趟(俺のターン)
 ## 組員: 01057020 林佑丞 01057033 洪銘均
 <a href="https://hackmd.io/@HongMJ1315/BkFdUuj_i">
-<img src='https://img.shields.io/badge/%E9%81%8A%E6%88%B2%E8%A6%8F%E5%89%87-MD-green?style=for-the-badge&logo=Google%20chrome&logoColor=white&labelColor=66cc00&color=94DD15'>
+<img src='https://img.shields.io/badge/%E9%81%8A%E6%88%B2%E8%A6%8F%E5%89%87-MD-green?style=for-the-badge&logo=Readme&logoColor=white&labelColor=66cc00&color=94DD15'>
 </a>
 <a href="https://youtu.be/ZzHHuSo3XV8?si=mzTJaTJZfV7GKMkB"><img alt="youtube views" src="https://img.shields.io/youtube/views/ZzHHuSo3XV8?logo=youtube&labelColor=ce4630&style=for-the-badge"/></a>
 
