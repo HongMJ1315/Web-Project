@@ -6,7 +6,7 @@
 <a href="https://youtu.be/ZzHHuSo3XV8?si=mzTJaTJZfV7GKMkB"><img alt="youtube views" src="https://img.shields.io/youtube/views/ZzHHuSo3XV8?logo=youtube&labelColor=ce4630&style=for-the-badge"/></a>
 
 
-## 執行
+## Run
 1. 請先在資料庫建立account資料庫，匯入account-db_2022_12_31.sql
 2. 進入網站(login.php)
 3. 註冊登入後加入遊戲
